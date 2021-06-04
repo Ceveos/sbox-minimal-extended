@@ -1,27 +1,34 @@
 using Sandbox;
-using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 [Library("sandbox")]
-public partial class SandboxGame : IAddon {
+public partial class SandboxGame : IGameMode {
 
 	public void Register()
 	{
 		Log.Info( "Sandbox Registered" );
 	}
-	
-  [Event("Server.Init")]
-  public static void ServerInit() {
-    // Create the HUD
-    new SandboxHud();
+
+	[Event( "addonhotload" )]
+	public void hotload()
+	{
+		Log.Info( "[Sandbox]Hotloaded" );
+	}
+
+	[Event("Init")]
+  public void ServerInit(bool IsServer) {
+
+		Log.Info( "Init" );
+		if (IsServer)
+		{
+			Log.Info( "Server initting HUD" );
+			// Create the HUD
+			new SandboxHud();
+		}
   }
 
   [Event("Client.Join")]
-  public static void ClientJoined(Client cl) {
-    Log.Info("Spawned");
+  public void ClientJoined(Client cl) {
+    Log.Info("Client Joined - Spawned");
     var player = new SandboxPlayer();
     player.Respawn();
 

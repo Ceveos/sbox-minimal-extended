@@ -1,6 +1,4 @@
 ﻿using Sandbox;
-using System.Collections.Generic;
-using System.Linq;
 
 
 //
@@ -22,21 +20,10 @@ namespace MinimalExtended
 	[Library( "minimal-extended" )]
 	public partial class MinimalExtendedGame : Game
   {
-		private static List<IAddon> _addons = new List<IAddon>();
 
 		public MinimalExtendedGame()
 		{
-			if ( IsServer )
-			{
-				Event.Run("Server.PreInit");
-				Event.Run("Server.Init");
-				Event.Run("Server.PostInit");
-			}
-			if ( IsClient ) {
-				Event.Run("Client.PreInit");
-				Event.Run("Client.Init");
-				Event.Run("Client.PostInit");
-			}
+			AddonEvent.Run( "Init", IsServer);
 		}
 		protected override void OnDestroy()
 		{
@@ -44,17 +31,16 @@ namespace MinimalExtended
 		}
 		public override void ClientJoined( Client cl )
 		{
-			Event.Run("Client.PreJoin", cl);
-			Event.Run("Client.Join", cl);
-			Event.Run("Client.PostJoin", cl);
+			Log.Info( "[Base] Client Joined" );
+			AddonEvent.Run( "Client.Join", cl );
 		}
 
 		[Event("hotloaded")]
-		public static void FindAddons()
+		public static void LoadAddons()
 		{
-			_addons.Clear();
-			Library.GetAll<IAddon>().ToList().ForEach( x =>_addons.Add( Library.Create<IAddon>(x)));
-			_addons.ForEach( addon => addon.Register() );
+			Log.Info( "Reloading addons" );
+			AddonEvent.LoadAddons();
+			AddonEvent.Run( "addonhotload" );
 		}
 	}
 
