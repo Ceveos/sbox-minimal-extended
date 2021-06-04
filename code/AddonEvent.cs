@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public static class AddonEvent
+[Library("addon-event")]
+public class AddonEvent
 {
-	private static bool _addons_loaded = false;
-	private static List<IAddon> _addons = new List<IAddon>();
+	private bool _addons_loaded = false;
+	private List<IAddon> _addons = new List<IAddon>();
 
-	public static void Run( string eventName)
+	private AddonEvent()
+	{
+		
+	}
+
+	public static AddonEvent instance { get; } = new();
+
+	public void Run( string eventName)
 	{
 		if ( !_addons_loaded )
 		{
@@ -20,7 +28,7 @@ public static class AddonEvent
 		Event.Run( eventName );
 	}
 
-		public static void Run<T>( string eventName, T arg0)
+		public void Run<T>( string eventName, T arg0)
 	{
 		if ( !_addons_loaded )
 		{
@@ -33,7 +41,7 @@ public static class AddonEvent
 		Event.Run( eventName, arg0 );
 	}
 
-	public static void LoadAddons()
+	public void LoadAddons()
 	{
 		_addons.Clear();
 		Library.GetAll<IAddon>().ToList().ForEach( x => _addons.Add( Library.Create<IAddon>( x ) ) );

@@ -14,7 +14,7 @@ public partial class SandboxGame : IGameMode {
 		Log.Info( "[Sandbox]Hotloaded" );
 	}
 
-	[Event("Init")]
+	[Event("init")]
   public void ServerInit(bool IsServer) {
 
 		Log.Info( "Init" );
