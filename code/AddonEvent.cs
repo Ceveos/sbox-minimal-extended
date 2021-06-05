@@ -45,6 +45,14 @@ namespace MinimalExtended
     }
 
     /// <summary>
+    /// Checks to see if any new addons were added, and loads them if so
+    /// </summary>
+    public static void CheckAddons()
+    {
+
+    }
+
+    /// <summary>
     /// Load (or reload) all addons on the server
     /// </summary>
     public static void LoadAddons()
@@ -52,20 +60,6 @@ namespace MinimalExtended
       _addons.Clear();
 
       Library.GetAll<AddonClass>().ToList().ForEach( x => _addons.Add( Library.Create<AddonClass>( x ) ) );
-
-      //bool gameModeRegistered = false;
-      _addons.ForEach( addon =>
-      {
-        //if ( addon is AddonClass )
-        //{
-        //  if ( gameModeRegistered )
-        //  {
-        //    Log.Error( "Multiple gamemode addons detected!" );
-        //  }
-        //  gameModeRegistered = true;
-        //}
-        addon.Register();
-      } );
 
       _addons_loaded = true;
     }

@@ -1,14 +1,11 @@
 ﻿
+using MinimalExtended;
 using Sandbox;
-using Sandbox.UI.Construct;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
 //
-namespace MinimalExample
+namespace MinimalHud
 {
 
   /// <summary>
@@ -21,14 +18,16 @@ namespace MinimalExample
   /// Your game needs to be registered (using [Library] here) with the same name 
   /// as your game addon. If it isn't then we won't be able to find it.
   /// </summary>
-  [Library( "minimal" )]
+  [Library("minimal-hud")]
   public partial class MinimalGame : AddonClass
   {
+    public override IAddonInfo GetAddonInfo => new AddonInfo();
+
     public MinimalGame()
     {
-      if ( IsServer )
+      if (IsServer)
       {
-        Log.Info( "My Gamemode Has Created Serverside!" );
+        Log.Info("My Gamemode Has Created Serverside!");
 
         // Create a HUD entity. This entity is globally networked
         // and when it is created clientside it creates the actual
@@ -37,9 +36,9 @@ namespace MinimalExample
         _ = new MinimalHudEntity();
       }
 
-      if ( IsClient )
+      if (IsClient)
       {
-        Log.Info( "My Gamemode Has Created Clientside!" );
+        Log.Info("My Gamemode Has Created Clientside!");
       }
     }
   }

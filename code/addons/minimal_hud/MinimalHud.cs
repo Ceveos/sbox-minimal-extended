@@ -3,7 +3,7 @@
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
 //
-namespace MinimalExample
+namespace MinimalHud
 {
   /// <summary>
   /// This is the HUD entity. It creates a RootPanel clientside, which can be accessed
@@ -13,9 +13,9 @@ namespace MinimalExample
   {
     public MinimalHudEntity()
     {
-      if ( IsClient )
+      if (IsClient)
       {
-        RootPanel.SetTemplate( "/ui/minimal-hud/minimalhud.html" );
+        RootPanel.SetTemplate("/ui/minimal-hud/minimalhud.html");
       }
     }
   }

@@ -1,23 +1,25 @@
 using Sandbox;
+using MinimalExtended;
 
-[Library( "save" )]
-public partial class Save : AddonClass
+namespace Save
 {
-  public override void Register()
+  [Library( "save" )]
+  public partial class Save : AddonClass
   {
-    Log.Info( "Save System Registered" );
+    public override IAddonInfo GetAddonInfo => new AddonInfo();
+
+    [Event( "addon-init" )]
+    public static void Init()
+    {
+      Log.Info( $"[Save] Init - {IsServer}" );
+    }
+
+    [Event( "hotloaded" )]
+    public static void Hotload()
+    {
+      Log.Info( "[Save] Hotloaded" );
+      Log.Info( "[Save] Post Hotloaded" );
+    }
   }
 
-  [Event( "init" )]
-  public static void Init( bool isServer )
-  {
-    Log.Info( $"[Save] Init - {isServer}" );
-  }
-
-  [Event( "hotloaded" )]
-  public static void Hotload()
-  {
-    Log.Info( "[Save] Hotloaded" );
-    Log.Info( "[Save] Post Hotloaded" );
-  }
 }

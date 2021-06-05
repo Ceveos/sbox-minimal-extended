@@ -1,23 +1,44 @@
 ﻿using Sandbox;
 using System;
 
-/// <summary>
-/// Used to dictate that a C# file is an addon. Should be the entrypoint of your addon.
-/// Derives from LibraryClass, and manages the Event lifecycle for you.
-/// </summary>
-public class AddonClass : LibraryClass
+namespace MinimalExtended
 {
-  public static bool IsServer => Host.IsServer;
-  public static bool IsClient => Host.IsClient;
-  public AddonClass()
+  /// <summary>
+  /// Used to dictate that a C# file is an addon. Should be the entrypoint of your addon.
+  /// Derives from LibraryClass, and manages the Event lifecycle for you.
+  /// </summary>
+  public class AddonClass : LibraryClass
   {
-    Event.Register( this );
-  }
+    /// <summary>
+    /// Is this code running in the server?
+    /// </summary>
+    public static bool IsServer => Host.IsServer;
 
-  ~AddonClass()
-  {
-    Event.Unregister( this );
-  }
+    /// <summary>
+    /// Is this code running in the client?
+    /// </summary>
+    public static bool IsClient => Host.IsClient;
 
-  public virtual void Register() { }
+    /// <summary>
+    /// Called when loading addons. Used to get required information.
+    /// </summary>
+    /// <returns>Addon information</returns>
+    public virtual IAddonInfo GetAddonInfo { get; }
+
+    /// <summary>
+    /// Ensures that the addon class listens to event triggers
+    /// </summary>
+    public AddonClass()
+    {
+      Event.Register( this );
+    }
+
+    /// <summary>
+    /// Remove this class from listening to events
+    /// </summary>
+    ~AddonClass()
+    {
+      Event.Unregister( this );
+    }
+  }
 }
