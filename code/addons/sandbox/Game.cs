@@ -1,41 +1,44 @@
 using Sandbox;
 
-[Library("sandbox")]
-public partial class SandboxGame : AddonClass {
+[Library( "sandbox" )]
+public partial class SandboxGame : AddonClass
+{
 
-	public override void Register()
-	{
-		Log.Info( "Sandbox Registered" );
-	}
-
-	[Event( "hotloaded" )]
-	public void hotload()
-	{
-    
-		Log.Info( "[Sandbox]Hotloaded" );
-	}
-
-	[Event("init")]
-  public void ServerInit(bool IsServer) {
-
-		Log.Info( "Init" );
-		if (IsServer)
-		{
-			Log.Info( "Server initting HUD" );
-			// Create the HUD
-			new SandboxHud();
-		}
+  public override void Register()
+  {
+    Log.Info( "Sandbox Registered" );
   }
 
-  [Event("client.join")]
-  public void ClientJoined(Client cl) {
-    Log.Info("Client Joined - Spawned");
+  [Event( "hotloaded" )]
+  public void hotload()
+  {
+
+    Log.Info( "[Sandbox]Hotloaded" );
+  }
+
+  [Event( "init" )]
+  public void ServerInit( bool IsServer )
+  {
+
+    Log.Info( "Init" );
+    if ( IsServer )
+    {
+      Log.Info( "Server initting HUD" );
+      // Create the HUD
+      _ = new SandboxHud();
+    }
+  }
+
+  [Event( "client.join" )]
+  public void ClientJoined( Client cl )
+  {
+    Log.Info( "Client Joined - Spawned" );
     var player = new SandboxPlayer();
     player.Respawn();
 
     cl.Pawn = player;
   }
-  
+
   [ServerCmd( "spawn" )]
   public static void Spawn( string modelname )
   {
