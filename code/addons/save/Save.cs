@@ -7,7 +7,7 @@ public partial class Save : AddonClass {
 		Log.Info( "Save System Registered" );
 	}
 
-	[Event( "addon-hotload" )]
+	[Event( "init" )]
 	public void init(bool isServer)
 	{
 		Log.Info( $"[Save] Init - {isServer}" );
@@ -17,11 +17,5 @@ public partial class Save : AddonClass {
 	public void hotload()
 	{
 		Log.Info( "[Save1]Hotloaded" );
-	}
-
-	[Event( "hotloaded" )]
-	public void hotloadtwo()
-	{
-		Log.Info( "[Save2]Hotloaded" );
 	}
 }
