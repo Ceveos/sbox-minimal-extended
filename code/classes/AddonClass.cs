@@ -7,7 +7,7 @@ namespace MinimalExtended
   /// Used to dictate that a C# file is an addon. Should be the entrypoint of your addon.
   /// Derives from LibraryClass, and manages the Event lifecycle for you.
   /// </summary>
-  public abstract class AddonClass : LibraryClass
+  public abstract class AddonClass : LibraryClass, IDisposable
   {
     /// <summary>
     /// Is this code running in the server?
@@ -36,7 +36,7 @@ namespace MinimalExtended
     /// <summary>
     /// Remove this class from listening to events
     /// </summary>
-    ~AddonClass()
+    public void Dispose()
     {
       Event.Unregister( this );
     }

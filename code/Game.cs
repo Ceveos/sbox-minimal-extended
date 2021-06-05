@@ -38,7 +38,17 @@ namespace MinimalExtended
     public static void ReloadAddons()
     {
       Log.Info( "Reloading all addons" );
+      Log.Warning( "Memory leak may occur; please restart gamemode if any problems arise" );
       AddonEvent.LoadAddons();
+    }
+
+    [Event( "hotloaded" )]
+    public static void CheckAddonHadErrors()
+    {
+      if ( AddonEvent.Addons_had_errors )
+      {
+        AddonEvent.LoadAddons();
+      }
     }
   }
 

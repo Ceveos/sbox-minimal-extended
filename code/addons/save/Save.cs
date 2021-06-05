@@ -11,7 +11,7 @@ namespace Save
       return new AddonInfo();
     }
 
-    [Event( "addon-init" )]
+    [Event( "addon.init" )]
     public static void Init()
     {
       Log.Info( $"[Save] Init - {IsServer}" );

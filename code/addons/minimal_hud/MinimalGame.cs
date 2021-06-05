@@ -36,7 +36,7 @@ namespace MinimalHud
         // and when it is created clientside it creates the actual
         // UI panels. You don't have to create your HUD via an entity,
         // this just feels like a nice neat way to do it.
-        _ = new MinimalHudEntity();
+        // _ = new MinimalHudEntity();
       }
 
       if (IsClient)

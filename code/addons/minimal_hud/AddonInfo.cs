@@ -13,6 +13,13 @@ namespace MinimalHud
 
     public double Version => 1.0;
 
-    public List<AddonDependency> Dependencies => new();
+    public List<AddonDependency> Dependencies => new()
+    {
+      new AddonDependency()
+      {
+        Name = "Sandbox",
+        MinVersion = 1.0
+      }
+    };
   }
 }
