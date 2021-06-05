@@ -2,63 +2,52 @@
 using System.Collections.Generic;
 using System.Linq;
 
-[Library("addon-event")]
-public class AddonEvent
-{
-	private bool _addons_loaded = false;
-	private List<AddonClass> _addons = new List<AddonClass>();
-
-	private AddonEvent()
+namespace MinimalExtended {
+	[Library("addon-event")]
+	public static class AddonEvent
 	{
-		
-	}
+		private static bool _addons_loaded = false;
+		private static readonly List<AddonClass> _addons = new();
 
-	public static AddonEvent instance { get; } = new();
-
-	public void Run( string eventName)
-	{
-		if ( !_addons_loaded )
+		public static void Run( string eventName)
 		{
-			Log.Info( "Loading addons" );
-			LoadAddons();
+			if ( !_addons_loaded )
+			{
+				LoadAddons();
+			}
+			Event.Run( eventName );
 		}
 
-		Log.Info( $"Loaded: {_addons_loaded}" );
-		Log.Info( $"Running event: {eventName}" );
-		Event.Run( eventName );
-	}
-
-		public void Run<T>( string eventName, T arg0)
-	{
-		if ( !_addons_loaded )
+			public static void Run<T>( string eventName, T arg0)
 		{
-			Log.Info( "Loading addons" );
-			LoadAddons();
+			if ( !_addons_loaded )
+			{
+				LoadAddons();
+			}
+			Event.Run( eventName, arg0 );
 		}
 
-		Log.Info( $"Loaded: {_addons_loaded}" );
-		Log.Info( $"Running event: {eventName}" );
-		Event.Run( eventName, arg0 );
-	}
+		public static void LoadAddons()
+		{
+			_addons.Clear();
 
-	public void LoadAddons()
-	{
-		_addons.Clear();
-		Library.GetAll<AddonClass>().ToList().ForEach( x => _addons.Add( Library.Create<AddonClass>( x ) ) );
+			Library.GetAll<AddonClass>().ToList().ForEach( x => _addons.Add( Library.Create<AddonClass>( x ) ) );
 
-		//bool gameModeRegistered = false;
-		_addons.ForEach( addon => {
-			//if ( addon is AddonClass )
-			//{
-			//	if ( gameModeRegistered )
-			//	{
-			//		Log.Error( "Multiple gamemode addons detected!" );
-			//	}
-			//	gameModeRegistered = true;
-			//}
-			addon.Register();
-		} );
+			//bool gameModeRegistered = false;
+			_addons.ForEach( addon => {
+				//if ( addon is AddonClass )
+				//{
+				//	if ( gameModeRegistered )
+				//	{
+				//		Log.Error( "Multiple gamemode addons detected!" );
+				//	}
+				//	gameModeRegistered = true;
+				//}
+				addon.Register();
+			} );
 
-		_addons_loaded = true;
+			_addons_loaded = true;
+		}
 	}
 }
+

@@ -23,7 +23,7 @@ namespace MinimalExtended
 
 		public MinimalExtendedGame()
 		{
-			AddonEvent.instance.Run( "init", IsServer);
+			AddonEvent.Run( "init", IsServer);
 		}
 		protected override void OnDestroy()
 		{
@@ -31,16 +31,13 @@ namespace MinimalExtended
 		}
 		public override void ClientJoined( Client cl )
 		{
-			Log.Info( "[Base] Client Joined" );
-			AddonEvent.instance.Run( "Client.Join", cl );
+			AddonEvent.Run( "client.join", cl );
 		}
 
-		[Event("hotloaded")]
-		public static void LoadAddons()
-		{
-			//Log.Info( "Reloading addons" );
-			//AddonEvent.instance.LoadAddons();
-			AddonEvent.instance.Run( "addon-hotload" );
+		[ServerCmd( "reload_addons", Help = "Reloads all addons" )]
+		public static void ReloadAddons() {
+			Log.Info("Reloading all addons");
+			AddonEvent.LoadAddons();
 		}
 	}
 

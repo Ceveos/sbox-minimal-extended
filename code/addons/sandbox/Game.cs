@@ -8,9 +8,10 @@ public partial class SandboxGame : AddonClass {
 		Log.Info( "Sandbox Registered" );
 	}
 
-	[Event( "addon-hotload" )]
+	[Event( "hotloaded" )]
 	public void hotload()
 	{
+    
 		Log.Info( "[Sandbox]Hotloaded" );
 	}
 
@@ -26,7 +27,7 @@ public partial class SandboxGame : AddonClass {
 		}
   }
 
-  [Event("Client.Join")]
+  [Event("client.join")]
   public void ClientJoined(Client cl) {
     Log.Info("Client Joined - Spawned");
     var player = new SandboxPlayer();

@@ -8,13 +8,13 @@ public partial class Save : AddonClass {
 	}
 
 	[Event( "init" )]
-	public void init(bool isServer)
+	public static void Init(bool isServer)
 	{
 		Log.Info( $"[Save] Init - {isServer}" );
 	}
 
-	[Event( "addon-hotload" )]
-	public void hotload()
+	[Event( "hotloaded" )]
+	public static void Hotload()
 	{
 		Log.Info( "[Save1]Hotloaded" );
 	}
