@@ -12,6 +12,8 @@ namespace MinimalExtended
   public static class AddonEvent
   {
     private static bool _addons_loaded = false;
+
+    private static readonly Dictionary<string, IAddonInfo> _addon_dictionary = new();
     private static readonly List<AddonClass> _addons = new();
 
     /// <summary>
@@ -49,6 +51,10 @@ namespace MinimalExtended
     /// </summary>
     public static void CheckAddons()
     {
+      // load all addons
+      // create dependency graph
+      // ensure it passes
+      // broadcast addon init
 
     }
 
@@ -58,8 +64,26 @@ namespace MinimalExtended
     public static void LoadAddons()
     {
       _addons.Clear();
+      _addon_dictionary.Clear();
 
-      Library.GetAll<AddonClass>().ToList().ForEach( x => _addons.Add( Library.Create<AddonClass>( x ) ) );
+      Library.GetAll<AddonClass>().Where( x => !x.IsAbstract ).ToList().ForEach( x =>
+        {
+          AddonClass addonInstance = Library.Create<AddonClass>( x );
+          IAddonInfo addonInstanceInfo = addonInstance.GetAddonInfo();
+          if ( addonInstanceInfo == null )
+          {
+            Log.Error( $"Invalid addon info: {addonInstance}" );
+          }
+          else if ( _addon_dictionary.ContainsKey( addonInstanceInfo.Name ) )
+          {
+            Log.Error( $"Duplicate addon detected: {addonInstanceInfo.Name}" );
+          }
+          else
+          {
+            _addons.Add( addonInstance );
+            _addon_dictionary.Add( addonInstanceInfo.Name, addonInstanceInfo );
+          }
+        } );
 
       _addons_loaded = true;
     }

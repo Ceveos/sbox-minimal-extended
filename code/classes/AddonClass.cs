@@ -7,7 +7,7 @@ namespace MinimalExtended
   /// Used to dictate that a C# file is an addon. Should be the entrypoint of your addon.
   /// Derives from LibraryClass, and manages the Event lifecycle for you.
   /// </summary>
-  public class AddonClass : LibraryClass
+  public abstract class AddonClass : LibraryClass
   {
     /// <summary>
     /// Is this code running in the server?
@@ -23,7 +23,7 @@ namespace MinimalExtended
     /// Called when loading addons. Used to get required information.
     /// </summary>
     /// <returns>Addon information</returns>
-    public virtual IAddonInfo GetAddonInfo { get; }
+    public abstract IAddonInfo GetAddonInfo();
 
     /// <summary>
     /// Ensures that the addon class listens to event triggers

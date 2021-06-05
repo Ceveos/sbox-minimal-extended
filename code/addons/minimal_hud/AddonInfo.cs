@@ -5,7 +5,7 @@ namespace MinimalHud
 {
   public class AddonInfo : IAddonInfo
   {
-    public string Name => "Sandbox";
+    public string Name => "Minimal HUD";
 
     public string Description => "Sample playground gamemode";
 

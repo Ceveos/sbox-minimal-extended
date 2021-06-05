@@ -21,7 +21,10 @@ namespace MinimalHud
   [Library("minimal-hud")]
   public partial class MinimalGame : AddonClass
   {
-    public override IAddonInfo GetAddonInfo => new AddonInfo();
+    public override IAddonInfo GetAddonInfo()
+    {
+      return new AddonInfo();
+    }
 
     public MinimalGame()
     {

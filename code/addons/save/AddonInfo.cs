@@ -5,7 +5,7 @@ namespace Save
 {
   public class AddonInfo : IAddonInfo
   {
-    public string Name => "Sandbox";
+    public string Name => "Save";
 
     public string Description => "Sample playground gamemode";
 

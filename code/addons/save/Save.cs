@@ -6,7 +6,10 @@ namespace Save
   [Library( "save" )]
   public partial class Save : AddonClass
   {
-    public override IAddonInfo GetAddonInfo => new AddonInfo();
+    public override IAddonInfo GetAddonInfo()
+    {
+      return new AddonInfo();
+    }
 
     [Event( "addon-init" )]
     public static void Init()

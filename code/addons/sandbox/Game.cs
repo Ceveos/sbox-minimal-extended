@@ -6,8 +6,10 @@ namespace SandboxGame
   [Library( "sandbox" )]
   public partial class SandboxGame : AddonClass
   {
-
-    public override IAddonInfo GetAddonInfo => new AddonInfo();
+    public override IAddonInfo GetAddonInfo()
+    {
+      return new AddonInfo();
+    }
 
     [Event( "hotloaded" )]
     public void hotload()
