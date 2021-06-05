@@ -38,9 +38,9 @@ namespace MinimalExtended
 		[Event("hotloaded")]
 		public static void LoadAddons()
 		{
-			Log.Info( "Reloading addons" );
-			AddonEvent.instance.LoadAddons();
-			AddonEvent.instance.Run( "addonhotload" );
+			//Log.Info( "Reloading addons" );
+			//AddonEvent.instance.LoadAddons();
+			AddonEvent.instance.Run( "addon-hotload" );
 		}
 	}
 

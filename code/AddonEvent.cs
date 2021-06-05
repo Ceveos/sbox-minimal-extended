@@ -6,7 +6,7 @@ using System.Linq;
 public class AddonEvent
 {
 	private bool _addons_loaded = false;
-	private List<IAddon> _addons = new List<IAddon>();
+	private List<AddonClass> _addons = new List<AddonClass>();
 
 	private AddonEvent()
 	{
@@ -44,18 +44,18 @@ public class AddonEvent
 	public void LoadAddons()
 	{
 		_addons.Clear();
-		Library.GetAll<IAddon>().ToList().ForEach( x => _addons.Add( Library.Create<IAddon>( x ) ) );
+		Library.GetAll<AddonClass>().ToList().ForEach( x => _addons.Add( Library.Create<AddonClass>( x ) ) );
 
-		bool gameModeRegistered = false;
+		//bool gameModeRegistered = false;
 		_addons.ForEach( addon => {
-			if ( addon is IGameMode )
-			{
-				if ( gameModeRegistered )
-				{
-					Log.Error( "Multiple gamemode addons detected!" );
-				}
-				gameModeRegistered = true;
-			}
+			//if ( addon is AddonClass )
+			//{
+			//	if ( gameModeRegistered )
+			//	{
+			//		Log.Error( "Multiple gamemode addons detected!" );
+			//	}
+			//	gameModeRegistered = true;
+			//}
 			addon.Register();
 		} );
 

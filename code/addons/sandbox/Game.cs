@@ -1,14 +1,14 @@
 using Sandbox;
 
 [Library("sandbox")]
-public partial class SandboxGame : IGameMode {
+public partial class SandboxGame : AddonClass {
 
-	public void Register()
+	public override void Register()
 	{
 		Log.Info( "Sandbox Registered" );
 	}
 
-	[Event( "addonhotload" )]
+	[Event( "addon-hotload" )]
 	public void hotload()
 	{
 		Log.Info( "[Sandbox]Hotloaded" );
