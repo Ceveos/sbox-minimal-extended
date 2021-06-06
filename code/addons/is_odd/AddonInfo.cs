@@ -14,7 +14,7 @@ namespace IsOdd
 
     public string Author => "Alex";
 
-    public double Version => 1.0;
+    public double Version => 1.1;
 
     public List<AddonDependency> Dependencies => new()
     {
