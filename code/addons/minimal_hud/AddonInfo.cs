@@ -10,9 +10,9 @@ namespace MinimalHud
   {
     public string Name => "Minimal HUD";
 
-    public string Description => "Sample playground gamemode";
+    public string Description => "Sample addon that just renders a HUD";
 
-    public string Author => "Garry";
+    public string Author => "Alex";
 
     public double Version => 1.0;
 
