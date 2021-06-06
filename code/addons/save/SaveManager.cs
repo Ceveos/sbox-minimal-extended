@@ -4,11 +4,11 @@ using MinimalExtended;
 namespace Save
 {
   [Library("save")]
-  public partial class SaveManager<T> : SaveModule where T : SaveModule
+  public partial class SaveManager : SaveModule
   {
-    private T SaveModule { get; }
+    private readonly SaveModule SaveModule;
 
-    public SaveManager(T saveModule)
+    public SaveManager(SaveModule saveModule)
     {
       SaveModule = saveModule;
     }

@@ -3,22 +3,57 @@ namespace Save
 {
   public class RamSaveModule : SaveModule
   {
-    private readonly Dictionary<string, Dictionary<string, object>> _dataStore = new();
+    private static Dictionary<string, RamSaveModule> _instances;
+    private static Dictionary<string, RamSaveModule> Instances
+    {
+      get
+      {
+        if (_instances == null)
+        {
+          _instances = new();
+        }
+        return _instances;
+      }
+    }
+    private Dictionary<string, Dictionary<string, object>> _dataStore;
+    private Dictionary<string, Dictionary<string, object>> DataStore
+    {
+      get
+      {
+        if (_dataStore == null)
+        {
+          _dataStore = new();
+        }
+        return _dataStore;
+      }
+    }
+
+    private RamSaveModule() { }
+
+    public static RamSaveModule Instance(string database = "Default")
+    {
+      if (!Instances.ContainsKey(database))
+      {
+        Instances.Add(database, new RamSaveModule());
+      }
+      return Instances[database];
+    }
+
     public override bool Clear()
     {
       // Not necessary, but may be quicker than
       // waiting for garbage collection
-      foreach (var client in _dataStore)
+      foreach (var client in DataStore)
       {
         client.Value.Clear();
       }
-      _dataStore.Clear();
+      DataStore.Clear();
       return true;
     }
 
     public override bool Exist(string key, string client = "Global")
     {
-      if (!_dataStore.TryGetValue(client, out var dict))
+      if (!DataStore.TryGetValue(client, out var dict))
       {
         return false;
       }
@@ -28,7 +63,7 @@ namespace Save
 
     public override T Load<T>(string key, string client = "Global")
     {
-      if (!_dataStore.TryGetValue(client, out var dict))
+      if (!DataStore.TryGetValue(client, out var dict))
       {
         return default;
       }
@@ -41,7 +76,7 @@ namespace Save
 
     public override T LoadClass<T>(string key, string client = "Global")
     {
-      if (!_dataStore.TryGetValue(client, out var dict))
+      if (!DataStore.TryGetValue(client, out var dict))
       {
         return default;
       }
@@ -54,7 +89,7 @@ namespace Save
 
     public override bool RemoveItem(string key, string client = "Global")
     {
-      if (!_dataStore.TryGetValue(client, out var dict))
+      if (!DataStore.TryGetValue(client, out var dict))
       {
         return false;
       }
@@ -63,21 +98,21 @@ namespace Save
 
     public override bool Save<T>(string key, T value, string client = "Global")
     {
-      if (!_dataStore.ContainsKey(client))
+      if (!DataStore.ContainsKey(client))
       {
-        _dataStore.Add(client, new());
+        DataStore.Add(client, new());
       }
-      _dataStore[client].Add(key, value);
+      DataStore[client][key] = value;
       return true;
     }
 
     public override bool SaveClass<T>(string key, T value, string client = "Global")
     {
-      if (!_dataStore.ContainsKey(client))
+      if (!DataStore.ContainsKey(client))
       {
-        _dataStore.Add(client, new());
+        DataStore.Add(client, new());
       }
-      _dataStore[client].Add(key, value);
+      DataStore[client][key] = value;
       return true;
     }
   }

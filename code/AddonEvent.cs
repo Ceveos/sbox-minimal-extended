@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -149,7 +150,11 @@ namespace MinimalExtended
         }
         AddonDictionary.Add( addonInfo.Name, addonInfo );
         // Don't add classes that require generics as it should be instantiated elsewhere 
-        if ( !addonInfo.MainClass.IsAbstract && !addonInfo.MainClass.ContainsGenericParameters )
+        if (
+          addonInfo.MainClass != null &&
+          !addonInfo.MainClass.IsAbstract &&
+          !addonInfo.MainClass.ContainsGenericParameters
+        )
         {
           AddonClass addonInstance = Library.Create<AddonClass>( addonInfo.MainClass );
           Addons.Add( addonInstance );

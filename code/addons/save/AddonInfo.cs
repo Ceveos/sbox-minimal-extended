@@ -8,7 +8,7 @@ namespace Save
   [Library("savemanager-info")]
   public class AddonInfo : IAddonInfo
   {
-    public string Name => "Save";
+    public string Name => "SaveManager";
 
     public string Description => "Sample playground gamemode";
 
@@ -18,6 +18,6 @@ namespace Save
 
     public List<AddonDependency> Dependencies => new();
 
-    public Type MainClass => typeof(SaveManager<>);
+    public Type MainClass => null;
   }
 }

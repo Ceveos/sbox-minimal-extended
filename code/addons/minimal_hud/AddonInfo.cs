@@ -20,7 +20,7 @@ namespace MinimalHud
     {
       new AddonDependency()
       {
-        Name = "Sandbox",
+        Name = "SaveManager",
         MinVersion = 1.0
       }
     };
