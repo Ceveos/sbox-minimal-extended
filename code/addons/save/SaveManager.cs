@@ -6,7 +6,12 @@ namespace Save
   [Library("save")]
   public partial class SaveManager : SaveModule
   {
-    private readonly SaveModule SaveModule;
+    /// <summary>
+    /// The save module that the save manager is using.
+    /// Save modules may expose additional methods to interact with the data
+    /// so accessing it may prove useful
+    /// </summary>
+    public readonly SaveModule SaveModule;
 
     public SaveManager(SaveModule saveModule)
     {
