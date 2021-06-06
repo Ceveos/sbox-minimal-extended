@@ -47,7 +47,7 @@ namespace MinimalHud
     {
       if (IsServer)
       {
-        Save.SaveManager db = new(Save.RamSaveModule.Instance("Default"));
+        Save.SaveModule db = Save.RamSaveModule.Instance("Default");
         int count = db.Load<int>("hotload_count");
         Log.Warning($"[Server] Hotloaded {++count} times");
         db.Save("hotload_count", count);
