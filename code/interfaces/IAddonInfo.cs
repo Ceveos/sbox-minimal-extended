@@ -30,6 +30,11 @@ namespace MinimalExtended
     double Version { get; }
 
     /// <summary>
+    /// Specify entry point for addon 
+    /// </summary>
+    Type MainClass { get; }
+
+    /// <summary>
     /// What addons are required to ensure functionality
     /// </summary>
     List<AddonDependency> Dependencies { get; }

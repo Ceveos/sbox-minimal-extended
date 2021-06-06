@@ -6,29 +6,34 @@ namespace SandboxGame
   [Library( "sandbox" )]
   public partial class SandboxGame : AddonClass
   {
-    public override IAddonInfo GetAddonInfo()
-    {
-      return new AddonInfo();
-    }
+    private readonly SandboxHud _sandboxHud;
 
     [Event( "hotloaded" )]
     public void hotload()
     {
 
-      Log.Info( "[Sandbox]Hotloaded" );
+      Log.Info( "[Sandbox] Hotloaded" );
     }
 
-    [Event( "init" )]
-    public void ServerInit( bool IsServer )
+    public SandboxGame()
     {
-
       Log.Info( "Init" );
       if ( IsServer )
       {
         Log.Info( "Server initting HUD" );
         // Create the HUD
-        _ = new SandboxHud();
+        _sandboxHud = new SandboxHud();
       }
+    }
+    ~SandboxGame()
+    {
+      _sandboxHud?.Delete();
+    }
+
+    public override void Dispose()
+    {
+      _sandboxHud?.Delete();
+      base.Dispose();
     }
 
     [Event( "client.join" )]

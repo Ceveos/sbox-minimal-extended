@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using MinimalExtended;
+using Sandbox;
 
 namespace MinimalHud
 {
+  [Library("minimal-info")]
   public class AddonInfo : IAddonInfo
   {
     public string Name => "Minimal HUD";
@@ -21,5 +24,7 @@ namespace MinimalHud
         MinVersion = 1.0
       }
     };
+
+    public Type MainClass => typeof(MinimalGame);
   }
 }

@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using MinimalExtended;
+using Sandbox;
 
 namespace SandboxGame
 {
+  [Library("sandbox-info")]
   public class AddonInfo : IAddonInfo
   {
     public string Name => "Sandbox";
@@ -14,5 +17,7 @@ namespace SandboxGame
     public double Version => 1.0;
 
     public List<AddonDependency> Dependencies => new();
+
+    public Type MainClass => typeof(SandboxGame);
   }
 }

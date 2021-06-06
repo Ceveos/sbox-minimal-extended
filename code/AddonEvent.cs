@@ -12,8 +12,29 @@ namespace MinimalExtended
   public static class AddonEvent
   {
     private static bool _addons_loaded = false;
-    private static readonly Dictionary<string, IAddonInfo> _addon_dictionary = new();
-    private static readonly List<AddonClass> _addons = new();
+
+    // Gmod Hot Reload breaks the dictionary / list if we inline instantiate it
+    // Hence this ugly mess
+    private static Dictionary<string, IAddonInfo> _addon_dictionary;
+    private static Dictionary<string, IAddonInfo> AddonDictionary
+    {
+      get
+      {
+        if ( _addon_dictionary == null )
+          _addon_dictionary = new();
+        return _addon_dictionary;
+      }
+    }
+    private static List<AddonClass> _addons;
+    private static List<AddonClass> Addons
+    {
+      get
+      {
+        if ( _addons == null )
+          _addons = new();
+        return _addons;
+      }
+    }
     public static bool Addons_had_errors { private set; get; } = false;
 
     /// <summary>
@@ -25,7 +46,7 @@ namespace MinimalExtended
     {
       if ( !_addons_loaded )
       {
-        LoadAddons();
+        LoadAddons( true );
       }
       Event.Run( eventName );
     }
@@ -41,7 +62,7 @@ namespace MinimalExtended
     {
       if ( !_addons_loaded )
       {
-        LoadAddons();
+        LoadAddons( true );
       }
       Event.Run( eventName, arg0 );
     }
@@ -55,7 +76,7 @@ namespace MinimalExtended
       List<string> missingDependencies = new();
       List<(string origin, string target, double minVersion)> dependencyVersionError = new();
 
-      foreach ( var kv in _addon_dictionary )
+      foreach ( var kv in AddonDictionary )
       {
         foreach ( var dependency in kv.Value.Dependencies )
         {
@@ -63,11 +84,11 @@ namespace MinimalExtended
           {
             Log.Error( $"Bad dependency name in {kv.Value}" );
           }
-          else if ( !_addon_dictionary.ContainsKey( dependency.Name ) )
+          else if ( !AddonDictionary.ContainsKey( dependency.Name ) )
           {
             missingDependencies.Add( dependency.Name );
           }
-          else if ( _addon_dictionary[dependency.Name].Version < dependency.MinVersion )
+          else if ( AddonDictionary[dependency.Name].Version < dependency.MinVersion )
           {
             dependencyVersionError.Add( (kv.Key, dependency.Name, dependency.MinVersion) );
           }
@@ -102,35 +123,38 @@ namespace MinimalExtended
     /// <summary>
     /// Load (or reload) all addons on the server
     /// </summary>
-    public static void LoadAddons()
+    public static void LoadAddons( bool reload_all = false )
     {
-      foreach ( var addon in _addons )
+
+      if ( reload_all )
       {
-        addon.Dispose();
-      }
-
-      _addons.Clear();
-      _addon_dictionary.Clear();
-
-      Library.GetAll<AddonClass>().Where( x => !x.IsAbstract ).ToList().ForEach( x =>
+        foreach ( var addon in Addons )
         {
-          AddonClass addonInstance = Library.Create<AddonClass>( x );
-          IAddonInfo addonInstanceInfo = addonInstance.GetAddonInfo();
-          if ( addonInstanceInfo == null )
-          {
-            Log.Error( $"[SKIPPING ADDON] Invalid addon info: {addonInstance}" );
-          }
-          else if ( _addon_dictionary.ContainsKey( addonInstanceInfo.Name ) )
-          {
-            Log.Error( $"[SKIPPING ADDON] Duplicate addon detected: {addonInstanceInfo.Name}" );
-          }
-          else
-          {
-            _addons.Add( addonInstance );
-            _addon_dictionary.Add( addonInstanceInfo.Name, addonInstanceInfo );
-          }
-        } );
+          addon.Dispose();
+        }
 
+        Addons.Clear();
+        AddonDictionary.Clear();
+      }
+      Library.GetAll<IAddonInfo>().ToList().ForEach( x =>
+      {
+        var addonInfo = Library.Create<IAddonInfo>( x );
+        if ( AddonDictionary.ContainsKey( addonInfo.Name ) )
+        {
+          if ( reload_all )
+          {
+            Log.Error( $"[SKIPPING ADDON] Duplicate addon detected: {addonInfo.Name}" );
+          }
+          return;
+        }
+        AddonDictionary.Add( addonInfo.Name, addonInfo );
+        // Don't add classes that require generics as it should be instantiated elsewhere 
+        if ( !addonInfo.MainClass.IsAbstract && !addonInfo.MainClass.ContainsGenericParameters )
+        {
+          AddonClass addonInstance = Library.Create<AddonClass>( addonInfo.MainClass );
+          Addons.Add( addonInstance );
+        }
+      } );
       _addons_loaded = true;
       CheckAddons();
     }

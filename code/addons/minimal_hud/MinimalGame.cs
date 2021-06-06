@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 using MinimalExtended;
 using Sandbox;
 
@@ -21,11 +22,7 @@ namespace MinimalHud
   [Library("minimal-hud")]
   public partial class MinimalGame : AddonClass
   {
-    public override IAddonInfo GetAddonInfo()
-    {
-      return new AddonInfo();
-    }
-
+    readonly MinimalHudEntity hudEntity;
     public MinimalGame()
     {
       if (IsServer)
@@ -36,13 +33,32 @@ namespace MinimalHud
         // and when it is created clientside it creates the actual
         // UI panels. You don't have to create your HUD via an entity,
         // this just feels like a nice neat way to do it.
-        // _ = new MinimalHudEntity();
+        hudEntity = new MinimalHudEntity();
       }
 
       if (IsClient)
       {
         Log.Info("My Gamemode Has Created Clientside!");
       }
+    }
+
+    ~MinimalGame()
+    {
+      if (hudEntity?.IsValid() == true)
+      {
+        Log.Info("Deleting hud entity");
+        hudEntity.Delete();
+      }
+    }
+
+    public override void Dispose()
+    {
+      if (hudEntity?.IsValid() == true)
+      {
+        Log.Info("Deleting hud entity");
+        hudEntity.Delete();
+      }
+      base.Dispose();
     }
   }
 

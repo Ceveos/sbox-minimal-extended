@@ -20,12 +20,6 @@ namespace MinimalExtended
     public static bool IsClient => Host.IsClient;
 
     /// <summary>
-    /// Called when loading addons. Used to get required information.
-    /// </summary>
-    /// <returns>Addon information</returns>
-    public abstract IAddonInfo GetAddonInfo();
-
-    /// <summary>
     /// Ensures that the addon class listens to event triggers
     /// </summary>
     public AddonClass()
@@ -36,7 +30,12 @@ namespace MinimalExtended
     /// <summary>
     /// Remove this class from listening to events
     /// </summary>
-    public void Dispose()
+    ~AddonClass()
+    {
+      Event.Unregister( this );
+    }
+
+    public virtual void Dispose()
     {
       Event.Unregister( this );
     }

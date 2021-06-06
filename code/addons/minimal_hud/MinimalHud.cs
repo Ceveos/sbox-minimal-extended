@@ -1,4 +1,5 @@
-﻿using Sandbox.UI;
+﻿using System;
+using Sandbox.UI;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
@@ -17,6 +18,11 @@ namespace MinimalHud
       {
         RootPanel.SetTemplate("/ui/minimal-hud/minimalhud.html");
       }
+    }
+
+    ~MinimalHudEntity()
+    {
+      RootPanel?.Delete();
     }
   }
 
