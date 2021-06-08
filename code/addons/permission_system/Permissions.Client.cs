@@ -64,24 +64,30 @@ namespace PermissionSystem
       Group group = user?.Group ?? Bundle.Options.DefaultGroup;
 
       // Check if permission for this command exists in the user overrides
-      foreach (Permission permission in user.Permissions)
+      if (user != null)
       {
-        if (Regex.IsMatch(args.Command, WildCardToRegular(permission.Pattern)))
+        foreach (Permission permission in user.Permissions)
         {
-          args.Handled = true;
-          args.HasPermission = permission.Enabled ?? true;
-          return args;
+          if (Regex.IsMatch(args.Command, WildCardToRegular(permission.Pattern)))
+          {
+            args.Handled = true;
+            args.HasPermission = permission.Enabled ?? true;
+            return args;
+          }
         }
       }
 
       // Check if permission for this command exists in the group
-      foreach (Permission permission in group.Permissions)
+      if (group != null)
       {
-        if (Regex.IsMatch(args.Command, WildCardToRegular(permission.Pattern)))
+        foreach (Permission permission in group.Permissions)
         {
-          args.Handled = true;
-          args.HasPermission = permission.Enabled ?? true;
-          return args;
+          if (Regex.IsMatch(args.Command, WildCardToRegular(permission.Pattern)))
+          {
+            args.Handled = true;
+            args.HasPermission = permission.Enabled ?? true;
+            return args;
+          }
         }
       }
       return args;
