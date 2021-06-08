@@ -1,0 +1,62 @@
+{
+  "options": {
+    "defaultGroup": "user"
+  },
+  "groups": [
+    {
+      "name": "admin",
+      "inherits": "mod",
+      "weight": 1000,
+      "immunity": 1000
+    },
+    {
+      "name": "mod",
+      "inherits": "user",
+      "weight": 50,
+      "immunity": 51
+    },
+    {
+      "name": "user",
+      "weight": 1,
+      "immunity": 2,
+      "roles": [
+        "VIP"
+      ],
+      "metadata": [
+        {
+          "key": "foo",
+          "value": "bar"
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    {
+      "group": "admin",
+      "permissions": [
+        "foo.*",
+        "bar.*"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "steamId": "YourSteamIDHere",
+      "group": "admin",
+      "overrides": {
+        "immunity": 101,
+        "permissions": [
+          "foo.*",
+          "!bar.*",
+          "someOtherNode.*"
+        ]
+      },
+      "metadata": [
+        {
+          "key": "foo",
+          "value": "bar"
+        }
+      ]
+    }
+  ]
+}

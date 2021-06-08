@@ -75,7 +75,7 @@ namespace MinimalExtended
     {
       Addons_had_errors = false;
       List<string> missingDependencies = new();
-      List<(string origin, string target, double minVersion)> dependencyVersionError = new();
+      List<(string origin, string target, double curVersion, double minVersion)> dependencyVersionError = new();
 
       foreach ( var kv in AddonDictionary )
       {
@@ -91,7 +91,7 @@ namespace MinimalExtended
           }
           else if ( AddonDictionary[dependency.Name].Version < dependency.MinVersion )
           {
-            dependencyVersionError.Add( (kv.Key, dependency.Name, dependency.MinVersion) );
+            dependencyVersionError.Add( (kv.Key, dependency.Name, AddonDictionary[dependency.Name].Version, dependency.MinVersion) );
           }
         }
       }
@@ -112,9 +112,9 @@ namespace MinimalExtended
         Addons_had_errors = true;
         Log.Error( "Bad addon version:" );
         Log.Error( "------------------" );
-        foreach ( var (origin, target, minVersion) in dependencyVersionError )
+        foreach ( var (origin, target, curVersion, minVersion) in dependencyVersionError )
         {
-          Log.Error( $"{origin} depends on {target} with version >= {minVersion}" );
+          Log.Error( $"{origin} depends on {target} with version >= {minVersion} (version {curVersion} detected)" );
         }
       }
 
