@@ -32,7 +32,7 @@ namespace MinimalExtended
     /// <summary>
     /// Specify entry point for addon 
     /// </summary>
-    Type? MainClass { get; }
+    Type MainClass { get; }
 
     /// <summary>
     /// What addons are required to ensure functionality

@@ -18,13 +18,8 @@ namespace PermissionSystem
 
     public List<AddonDependency> Dependencies => new()
     {
-      new AddonDependency()
-      {
-        Name = "SaveManager",
-        MinVersion = 1.0
-      }
     };
 
-    public Type MainClass => typeof(PermissionSystem);
+    public Type MainClass => null;
   }
 }

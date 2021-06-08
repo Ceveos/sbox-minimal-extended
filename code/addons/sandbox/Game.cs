@@ -1,5 +1,6 @@
 using Sandbox;
 using MinimalExtended;
+using System;
 
 namespace SandboxGame
 {
@@ -40,6 +41,7 @@ namespace SandboxGame
     public void ClientJoined( Client cl )
     {
       Log.Info( "Client Joined - Spawned" );
+      Log.Info( $"{cl.GetType()}" );
       var player = new SandboxPlayer();
       player.Respawn();
 

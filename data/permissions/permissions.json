@@ -1,6 +1,7 @@
 {
   "options": {
-    "defaultGroup": "user"
+    "defaultGroup": "user",
+    "reloadOnHotload": true
   },
   "groups": [
     {
@@ -34,21 +35,26 @@
     {
       "group": "admin",
       "permissions": [
-        "foo.*",
-        "bar.*"
+        "foo.*"
+      ]
+    },
+    {
+      "group": "user",
+      "permissions": [
+        "bar.*",
+        "test"
       ]
     }
   ],
   "users": [
     {
-      "steamId": "YourSteamIDHere",
+      "steamId": "76561197989847517",
       "group": "admin",
       "overrides": {
-        "immunity": 101,
+        "immunity": 1000,
         "permissions": [
-          "foo.*",
-          "!bar.*",
-          "someOtherNode.*"
+          "noclip",
+          "!god"
         ]
       },
       "metadata": [

@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -76,6 +77,22 @@ namespace PermissionSystem
 
           groups.Add(group.Name, group);
         }
+
+        // Link inheritance once all groups established
+        foreach (JsonGroup jsonGroup in jsonGroups)
+        {
+          if (jsonGroup.inherits != null && groups.ContainsKey(jsonGroup.inherits))
+          {
+            if (jsonGroup.inherits == jsonGroup.name)
+            {
+              Log.Error($"[Permission System] {jsonGroup.name} Group cannot inherit from itself");
+            }
+            else
+            {
+              groups[jsonGroup.name].InheritsFrom = groups[jsonGroup.inherits];
+            }
+          }
+        }
       }
       else
       {
@@ -124,6 +141,8 @@ namespace PermissionSystem
       // Get options
       Options options = new();
 
+      options.ReloadOnHotload = jsonOptions.reloadOnHotload;
+
       if (groups.ContainsKey(jsonOptions.defaultGroup))
       {
         options.DefaultGroup = groups[jsonOptions.defaultGroup];
@@ -155,6 +174,87 @@ namespace PermissionSystem
           }
         }
       }
+
+      // Update group permissions/immunity based on inheritance
+      foreach (Group group in groups.Values)
+      {
+        if (group.InheritsFrom == null)
+        {
+          continue;
+        }
+
+        Group mergedGroup = group;
+        Group currentGroup = group.InheritsFrom;
+        List<string> groupsVisited = new();
+        groupsVisited.Add(mergedGroup.Name);
+
+        while (currentGroup != null)
+        {
+          if (groupsVisited.Contains(currentGroup.Name))
+          {
+            Log.Error($"[Permission System] Circular inheritance detected for group {currentGroup.Name}");
+            break;
+          }
+
+          groupsVisited.Add(currentGroup.Name);
+
+          if (mergedGroup.Weight == null && currentGroup.Weight != null)
+          {
+            mergedGroup.Weight = currentGroup.Weight;
+          }
+          if (mergedGroup.Immunity == null && mergedGroup.Weight != null)
+          {
+            mergedGroup.Immunity = mergedGroup.Weight + 1;
+          }
+          if (mergedGroup.Immunity == null && currentGroup.Immunity != null)
+          {
+            mergedGroup.Immunity = currentGroup.Immunity;
+          }
+
+          // Copy over new permissions
+          if (currentGroup.Permissions != null)
+          {
+            mergedGroup.Permissions ??= new();
+            foreach (Permission permission in currentGroup.Permissions)
+            {
+              if (!mergedGroup.Permissions.Any(x => x.Pattern == permission.Pattern))
+              {
+                mergedGroup.Permissions.Add(permission);
+              }
+            }
+
+          }
+
+          // Copy over new metadata
+          if (currentGroup.Metadata != null)
+          {
+            mergedGroup.Metadata ??= new();
+            foreach ((string key, string value) in currentGroup.Metadata)
+            {
+              if (!mergedGroup.Metadata.ContainsKey(key))
+              {
+                mergedGroup.Metadata.Add(key, value);
+              }
+            }
+          }
+
+          // Copy over roles
+          if (currentGroup.Roles != null)
+          {
+            mergedGroup.Roles ??= new();
+            foreach (string role in currentGroup.Roles)
+            {
+              if (!mergedGroup.Roles.Contains(role))
+              {
+                mergedGroup.Roles.Add(role);
+              }
+            }
+          }
+
+          currentGroup = currentGroup.InheritsFrom;
+        }
+      }
+
 
       // Return combined bundle
       return new PermissionBundle()
