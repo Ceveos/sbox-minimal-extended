@@ -17,6 +17,7 @@ namespace Save
     public double Version => 1.0;
 
     public List<AddonDependency> Dependencies => new();
+    public Dictionary<string, string> Metadata => new();
 
     // No main class as the save manager should be instansiated by 
     // the desired classes themselves.

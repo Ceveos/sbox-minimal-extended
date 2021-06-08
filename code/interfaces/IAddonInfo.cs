@@ -38,5 +38,10 @@ namespace MinimalExtended
     /// What addons are required to ensure functionality
     /// </summary>
     List<AddonDependency> Dependencies { get; }
+
+    /// <summary>
+    /// Any extra data you want to store for this addon
+    /// </summary>
+    Dictionary<string, string> Metadata { get; }
   }
 }

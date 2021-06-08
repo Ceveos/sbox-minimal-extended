@@ -19,6 +19,8 @@ namespace MinimalExtended
     /// </summary>
     public static bool IsClient => Host.IsClient;
 
+    public virtual void Initialize() { }
+
     /// <summary>
     /// Ensures that the addon class listens to event triggers
     /// </summary>

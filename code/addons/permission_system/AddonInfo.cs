@@ -19,7 +19,8 @@ namespace PermissionSystem
     public List<AddonDependency> Dependencies => new()
     {
     };
+    public Dictionary<string, string> Metadata => new();
 
-    public Type MainClass => null;
+    public Type MainClass => typeof(PermissionManager);
   }
 }

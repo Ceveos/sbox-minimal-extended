@@ -16,9 +16,8 @@ namespace IsOdd
 
     public double Version => 1.1;
 
-    public List<AddonDependency> Dependencies => new()
-    {
-    };
+    public List<AddonDependency> Dependencies => new();
+    public Dictionary<string, string> Metadata => new();
 
     public Type MainClass => null;
   }

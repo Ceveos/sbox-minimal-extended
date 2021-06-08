@@ -15,6 +15,7 @@ namespace IsEven
     public string Author => "Alex";
 
     public double Version => 1.0;
+    public Type MainClass => null;
 
     public List<AddonDependency> Dependencies => new()
     {
@@ -25,6 +26,6 @@ namespace IsEven
       }
     };
 
-    public Type MainClass => null;
+    public Dictionary<string, string> Metadata => new();
   }
 }

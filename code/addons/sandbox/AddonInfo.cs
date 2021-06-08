@@ -17,7 +17,7 @@ namespace SandboxGame
     public double Version => 1.0;
 
     public List<AddonDependency> Dependencies => new();
-
+    public Dictionary<string, string> Metadata => new();
     public Type MainClass => typeof(SandboxGame);
   }
 }

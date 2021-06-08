@@ -117,8 +117,6 @@ namespace MinimalExtended
           Log.Error( $"{origin} depends on {target} with version >= {minVersion} (version {curVersion} detected)" );
         }
       }
-
-      Event.Run( "addon.init" );
     }
 
     /// <summary>
@@ -126,7 +124,7 @@ namespace MinimalExtended
     /// </summary>
     public static void LoadAddons( bool reload_all = false )
     {
-
+      List<AddonClass> newlyLoadedAddons = new();
       if ( reload_all )
       {
         foreach ( var addon in Addons )
@@ -158,8 +156,11 @@ namespace MinimalExtended
         {
           AddonClass addonInstance = Library.Create<AddonClass>( addonInfo.MainClass );
           Addons.Add( addonInstance );
+          newlyLoadedAddons.Add( addonInstance );
         }
       } );
+
+      newlyLoadedAddons.ForEach( addon => addon.Initialize() );
       _addons_loaded = true;
       CheckAddons();
     }

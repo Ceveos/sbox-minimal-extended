@@ -6,8 +6,7 @@ namespace PermissionSystem
   [Library("permission-manager")]
   public class PermissionManager : AddonClass
   {
-    [Event("addon.init")]
-    public static void Initialize()
+    public override void Initialize()
     {
       if (IsServer && !Permissions.IsInitialized)
       {

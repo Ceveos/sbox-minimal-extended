@@ -16,6 +16,8 @@ namespace MinimalHud
 
     public double Version => 1.0;
 
+    public Type MainClass => typeof(MinimalGame);
+
     public List<AddonDependency> Dependencies => new()
     {
       new AddonDependency()
@@ -24,7 +26,7 @@ namespace MinimalHud
         MinVersion = 1.0
       }
     };
+    public Dictionary<string, string> Metadata => new();
 
-    public Type MainClass => typeof(MinimalGame);
   }
 }

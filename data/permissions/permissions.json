@@ -54,7 +54,8 @@
         "immunity": 1000,
         "permissions": [
           "noclip",
-          "!god"
+          "!god",
+          "!test"
         ]
       },
       "metadata": [
