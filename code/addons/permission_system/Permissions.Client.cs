@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using System;
 using Sandbox;
+using System.Collections.Generic;
 
 namespace PermissionSystem
 {
@@ -43,6 +44,118 @@ namespace PermissionSystem
       var args = new ClientCanTargetEventArgs(client, target);
       ClientCanTargetEvent?.Invoke(args);
       return args.HasPermission;
+    }
+
+    /// <summary>
+    /// Get the group of a client
+    /// </summary>
+    /// <param name="client">Client that you want the group of</param>
+    /// <returns>Group that the client is in</returns>
+    public static Group CurrentGroup(this Client client)
+    {
+      if (client?.IsValid() != true)
+      {
+        return null;
+      }
+
+      User user = GetUser(client.SteamId);
+      Group group = user?.Group ?? Bundle.Options.DefaultGroup;
+      return group;
+    }
+
+    /// <summary>
+    /// Get the User of a client
+    /// </summary>
+    /// <param name="client">Client that you want the user of</param>
+    /// <returns>User that the client is</returns>
+    public static User CurrentUser(this Client client)
+    {
+      if (client?.IsValid() != true)
+      {
+        return null;
+      }
+
+      return GetUser(client.SteamId);
+    }
+
+    /// <summary>
+    /// Get the roles that a client is in
+    /// </summary>
+    /// <param name="client">Client that you want the roles of</param>
+    /// <returns>Roles the client is</returns>
+    public static List<string> GetRoles(this Client client)
+    {
+      List<string> roles = new();
+      if (client?.IsValid() != true)
+      {
+        return roles;
+      }
+
+      User user = GetUser(client.SteamId);
+      Group group = user?.Group ?? Bundle.Options.DefaultGroup;
+
+      // Add user roles
+      if (user?.Roles != null)
+      {
+        user.Roles.ForEach(role =>
+        {
+          if (!roles.Contains(role))
+          {
+            roles.Add(role);
+          }
+        });
+      }
+
+      // Add group roles
+      if (group?.Roles != null)
+      {
+        group.Roles.ForEach(role =>
+        {
+          if (!roles.Contains(role))
+          {
+            roles.Add(role);
+          }
+        });
+      }
+
+      return roles;
+    }
+
+    /// <summary>
+    /// Get the metadata of a client. Contains user-specific and group-specific metadata.
+    /// </summary>
+    /// <param name="client">Client that you want the metadata of</param>
+    /// <returns>Metadata of the client</returns>
+    public static Dictionary<string, string> GetMetadata(this Client client)
+    {
+      Dictionary<string, string> metadata = new();
+      if (client?.IsValid() != true)
+      {
+        return metadata;
+      }
+
+      User user = GetUser(client.SteamId);
+      Group group = user?.Group ?? Bundle.Options.DefaultGroup;
+
+      // Add group metadata
+      if (group?.Metadata != null)
+      {
+        foreach ((string key, string value) in group.Metadata)
+        {
+          metadata[key] = value;
+        }
+      }
+
+      // Add group metadata
+      if (user?.Metadata != null)
+      {
+        foreach ((string key, string value) in user.Metadata)
+        {
+          metadata[key] = value;
+        }
+      }
+
+      return metadata;
     }
 
     // TODO: Can you get client from Player?

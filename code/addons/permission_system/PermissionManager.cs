@@ -43,5 +43,23 @@ namespace PermissionSystem
         Log.Info($"[Permission System] Can you run '{command}': {ConsoleSystem.Caller.HasCustomPermission(command)}");
       }
     }
+
+    [ServerCmd("permission_current_group", Help = "See what group you're in")]
+    public static void GetClientGroup()
+    {
+      if (ConsoleSystem.Caller?.IsValid() == true)
+      {
+        Log.Info($"[Permission System] Current group: {ConsoleSystem.Caller.CurrentGroup()?.Name}");
+      }
+    }
+
+    [ServerCmd("permission_current_roles", Help = "See what group you're in")]
+    public static void GetClientRoles()
+    {
+      if (ConsoleSystem.Caller?.IsValid() == true)
+      {
+        Log.Info($"[Permission System] Current roles: {string.Join(',', ConsoleSystem.Caller.GetRoles())}");
+      }
+    }
   }
 }
