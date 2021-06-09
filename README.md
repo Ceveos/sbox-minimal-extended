@@ -1,4 +1,4 @@
-# sbox-minimal
+# sbox-minimal-extended
 
 ![Screenshot](https://files.facepunch.com/garry/8fc638dc-2c62-4ed6-b20a-69c2c5342a9c.jpg)
 
