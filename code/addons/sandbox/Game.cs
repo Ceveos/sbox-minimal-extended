@@ -1,19 +1,20 @@
 using Sandbox;
 using MinimalExtended;
-using System;
+using Logger = AddonLogger.Logger;
 
 namespace SandboxGame
 {
   [Library( "sandbox" )]
   public partial class SandboxGame : AddonClass
   {
+    private static readonly Logger Log = new( AddonInfo.Instance );
     private readonly SandboxHud _sandboxHud;
 
     [Event( "hotloaded" )]
     public void hotload()
     {
 
-      Log.Info( "[Sandbox] Hotloaded" );
+      Log.Info( "Hotloaded" );
     }
 
     public SandboxGame()
@@ -21,7 +22,7 @@ namespace SandboxGame
       Log.Info( "Init" );
       if ( IsServer )
       {
-        Log.Info( "Server initting HUD" );
+        Log.Info( "[Server] initting HUD" );
         // Create the HUD
         _sandboxHud = new SandboxHud();
       }

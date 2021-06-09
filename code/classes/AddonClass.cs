@@ -1,6 +1,5 @@
 ﻿using Sandbox;
 using System;
-
 namespace MinimalExtended
 {
   /// <summary>
@@ -9,6 +8,7 @@ namespace MinimalExtended
   /// </summary>
   public abstract class AddonClass : LibraryClass, IDisposable
   {
+
     /// <summary>
     /// Is this code running in the server?
     /// </summary>

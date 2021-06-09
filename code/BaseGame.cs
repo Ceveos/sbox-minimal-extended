@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-
+using Logger = AddonLogger.Logger;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
@@ -17,35 +17,36 @@ namespace MinimalExtended
   /// Your game needs to be registered (using [Library] here) with the same name 
   /// as your game addon. If it isn't then we won't be able to find it.
   /// </summary>
-  [Library( "minimal-extended" )]
+  [Library("minimal-extended")]
   public partial class MinimalExtendedGame : Game
   {
+    private static readonly Logger Log = new(BaseInfo.Instance);
 
     public MinimalExtendedGame()
     {
-      AddonEvent.Run( "init", IsServer );
+      AddonEvent.Run("init", IsServer);
     }
     protected override void OnDestroy()
     {
       base.OnDestroy();
     }
-    public override void ClientJoined( Client cl )
+    public override void ClientJoined(Client cl)
     {
-      AddonEvent.Run( "client.join", cl );
+      AddonEvent.Run("client.join", cl);
     }
 
-    [ServerCmd( "reload_addons", Help = "Reloads all addons" )]
+    [ServerCmd("reload_addons", Help = "Reloads all addons")]
     public static void ReloadAddons()
     {
-      Log.Info( "Reloading all addons" );
-      Log.Warning( "Memory leak may occur; please restart gamemode if any problems arise" );
-      AddonEvent.LoadAddons( true );
+      Log.Info("Reloading all addons");
+      Log.Warning("Memory leak may occur; please restart gamemode if any problems arise");
+      AddonEvent.LoadAddons(true);
     }
 
-    [Event( "hotloaded" )]
+    [Event("hotloaded")]
     public static void CheckAddonHadErrors()
     {
-      AddonEvent.LoadAddons( AddonEvent.Addons_had_errors );
+      AddonEvent.LoadAddons(AddonEvent.Addons_had_errors);
     }
   }
 

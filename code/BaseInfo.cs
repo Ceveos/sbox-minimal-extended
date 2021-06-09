@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using MinimalExtended;
 using Sandbox;
 
-namespace IsEven
+namespace MinimalExtended
 {
-  [Library( "is-even-info" )]
-  public class AddonInfo : IAddonInfo
+  [Library("base-info")]
+  public class BaseInfo : IAddonInfo
   {
-    public string Name => "Is_Even";
+    public string Name => "Minimal Extended";
 
-    public string Description => "But does it even?";
+    public string Description => "Base game template; controls lifecycle of addons";
 
     public string Author => "Alex";
 
@@ -21,12 +20,13 @@ namespace IsEven
     {
       new AddonDependency()
       {
-        Name = "Is_Odd",
-        MinVersion = 1.1
+        Name = "Logger",
+        MinVersion = 1.0
       }
     };
 
     public Dictionary<string, string> Metadata => new();
-    public static IAddonInfo Instance => new AddonInfo();
+
+    public static IAddonInfo Instance => new BaseInfo();
   }
 }

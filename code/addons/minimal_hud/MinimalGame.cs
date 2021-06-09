@@ -2,6 +2,7 @@
 
 using MinimalExtended;
 using Sandbox;
+using Logger = AddonLogger.Logger;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
@@ -19,15 +20,16 @@ namespace MinimalHud
   /// Your game needs to be registered (using [Library] here) with the same name 
   /// as your game addon. If it isn't then we won't be able to find it.
   /// </summary>
-  [Library("minimal-hud")]
+  [Library( "minimal-hud" )]
   public partial class MinimalGame : AddonClass
   {
+    private static readonly Logger Log = new( AddonInfo.Instance );
     readonly MinimalHudEntity hudEntity;
     public MinimalGame()
     {
-      if (IsServer)
+      if ( IsServer )
       {
-        Log.Info("My Gamemode Has Created Serverside!");
+        Log.Info( "[Server] Hud created" );
 
         // Create a HUD entity. This entity is globally networked
         // and when it is created clientside it creates the actual
@@ -35,39 +37,34 @@ namespace MinimalHud
         // this just feels like a nice neat way to do it.
         hudEntity = new MinimalHudEntity();
       }
-
-      if (IsClient)
-      {
-        Log.Info("My Gamemode Has Created Clientside!");
-      }
     }
 
-    [Event("hotloaded")]
+    [Event( "hotloaded" )]
     public static void OnHotLoad()
     {
-      if (IsServer)
+      if ( IsServer )
       {
-        Save.SaveModule db = Save.RamSaveModule.Instance("Default");
-        int count = db.Load<int>("hotload_count");
-        Log.Warning($"[Server] Hotloaded {++count} times");
-        db.Save("hotload_count", count);
+        Save.SaveModule db = Save.RamSaveModule.Instance( "Default" );
+        int count = db.Load<int>( "hotload_count" );
+        Log.Warning( $"[Server] Hotloaded {++count} times" );
+        db.Save( "hotload_count", count );
       }
     }
 
     ~MinimalGame()
     {
-      if (hudEntity?.IsValid() == true)
+      if ( hudEntity?.IsValid() == true )
       {
-        Log.Info("Deleting hud entity");
+        Log.Info( "Deleting hud entity" );
         hudEntity.Delete();
       }
     }
 
     public override void Dispose()
     {
-      if (hudEntity?.IsValid() == true)
+      if ( hudEntity?.IsValid() == true )
       {
-        Log.Info("Deleting hud entity");
+        Log.Info( "Deleting hud entity" );
         hudEntity.Delete();
       }
       base.Dispose();

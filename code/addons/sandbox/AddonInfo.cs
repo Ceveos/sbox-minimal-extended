@@ -5,7 +5,7 @@ using Sandbox;
 
 namespace SandboxGame
 {
-  [Library("sandbox-info")]
+  [Library( "sandbox-info" )]
   public class AddonInfo : IAddonInfo
   {
     public string Name => "Sandbox";
@@ -16,8 +16,16 @@ namespace SandboxGame
 
     public double Version => 1.0;
 
-    public List<AddonDependency> Dependencies => new();
+    public List<AddonDependency> Dependencies => new()
+    {
+      new AddonDependency()
+      {
+        Name = "Logger",
+        MinVersion = 1.0
+      }
+    };
     public Dictionary<string, string> Metadata => new();
-    public Type MainClass => typeof(SandboxGame);
+    public Type MainClass => typeof( SandboxGame );
+    public static IAddonInfo Instance => new AddonInfo();
   }
 }

@@ -1,7 +1,8 @@
-﻿using Sandbox;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using Sandbox;
+using Logger = AddonLogger.Logger;
 
 namespace MinimalExtended
 {
@@ -12,6 +13,7 @@ namespace MinimalExtended
   [Library( "addon-event" )]
   public static class AddonEvent
   {
+    private static readonly Logger Log = new( "Addon Event" );
     private static bool _addons_loaded = false;
 
     // Gmod Hot Reload breaks the dictionary / list if we inline instantiate it
@@ -85,7 +87,7 @@ namespace MinimalExtended
           {
             Log.Error( $"Bad dependency name in {kv.Value}" );
           }
-          else if ( !AddonDictionary.ContainsKey( dependency.Name ) )
+          else if ( !dependency.Optional && !AddonDictionary.ContainsKey( dependency.Name ) )
           {
             missingDependencies.Add( dependency.Name );
           }

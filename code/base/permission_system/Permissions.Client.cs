@@ -18,14 +18,14 @@ namespace PermissionSystem
     /// <param name="client">Client whose permissions needs to be checked</param>
     /// <param name="command">Command that you want to run</param>
     /// <returns>True if the client has permission</returns>
-    public static bool HasCustomPermission(this Client client, string command)
+    public static bool HasCustomPermission( this Client client, string command )
     {
-      if (client?.IsValid() != true)
+      if ( client?.IsValid() != true )
       {
         return false;
       }
-      var args = new ClientHasPermissionEventArgs(client, command);
-      ClientHasPermissionEvent?.Invoke(args);
+      var args = new ClientHasPermissionEventArgs( client, command );
+      ClientHasPermissionEvent?.Invoke( args );
       return args.HasPermission;
     }
 
@@ -35,14 +35,14 @@ namespace PermissionSystem
     /// <param name="client">Client who is running the command</param>
     /// <param name="target">Client who is being targetted by the command</param>
     /// <returns>True if the client can target</returns>
-    public static bool CanTarget(this Client client, Client target)
+    public static bool CanTarget( this Client client, Client target )
     {
-      if (client?.IsValid() != true || target?.IsValid() != true)
+      if ( client?.IsValid() != true || target?.IsValid() != true )
       {
         return false;
       }
-      var args = new ClientCanTargetEventArgs(client, target);
-      ClientCanTargetEvent?.Invoke(args);
+      var args = new ClientCanTargetEventArgs( client, target );
+      ClientCanTargetEvent?.Invoke( args );
       return args.HasPermission;
     }
 
@@ -51,14 +51,14 @@ namespace PermissionSystem
     /// </summary>
     /// <param name="client">Client that you want the group of</param>
     /// <returns>Group that the client is in</returns>
-    public static Group CurrentGroup(this Client client)
+    public static Group CurrentGroup( this Client client )
     {
-      if (client?.IsValid() != true)
+      if ( client?.IsValid() != true )
       {
         return null;
       }
 
-      User user = GetUser(client.SteamId);
+      User user = GetUser( client.SteamId );
       Group group = user?.Group ?? Bundle.Options.DefaultGroup;
       return group;
     }
@@ -68,14 +68,14 @@ namespace PermissionSystem
     /// </summary>
     /// <param name="client">Client that you want the user of</param>
     /// <returns>User that the client is</returns>
-    public static User CurrentUser(this Client client)
+    public static User CurrentUser( this Client client )
     {
-      if (client?.IsValid() != true)
+      if ( client?.IsValid() != true )
       {
         return null;
       }
 
-      return GetUser(client.SteamId);
+      return GetUser( client.SteamId );
     }
 
     /// <summary>
@@ -83,39 +83,39 @@ namespace PermissionSystem
     /// </summary>
     /// <param name="client">Client that you want the roles of</param>
     /// <returns>Roles the client is</returns>
-    public static List<string> GetRoles(this Client client)
+    public static List<string> GetRoles( this Client client )
     {
       List<string> roles = new();
-      if (client?.IsValid() != true)
+      if ( client?.IsValid() != true )
       {
         return roles;
       }
 
-      User user = GetUser(client.SteamId);
+      User user = GetUser( client.SteamId );
       Group group = user?.Group ?? Bundle.Options.DefaultGroup;
 
       // Add user roles
-      if (user?.Roles != null)
+      if ( user?.Roles != null )
       {
-        user.Roles.ForEach(role =>
-        {
-          if (!roles.Contains(role))
-          {
-            roles.Add(role);
-          }
-        });
+        user.Roles.ForEach( role =>
+         {
+           if ( !roles.Contains( role ) )
+           {
+             roles.Add( role );
+           }
+         } );
       }
 
       // Add group roles
-      if (group?.Roles != null)
+      if ( group?.Roles != null )
       {
-        group.Roles.ForEach(role =>
-        {
-          if (!roles.Contains(role))
-          {
-            roles.Add(role);
-          }
-        });
+        group.Roles.ForEach( role =>
+         {
+           if ( !roles.Contains( role ) )
+           {
+             roles.Add( role );
+           }
+         } );
       }
 
       return roles;
@@ -126,30 +126,30 @@ namespace PermissionSystem
     /// </summary>
     /// <param name="client">Client that you want the metadata of</param>
     /// <returns>Metadata of the client</returns>
-    public static Dictionary<string, string> GetMetadata(this Client client)
+    public static Dictionary<string, string> GetMetadata( this Client client )
     {
       Dictionary<string, string> metadata = new();
-      if (client?.IsValid() != true)
+      if ( client?.IsValid() != true )
       {
         return metadata;
       }
 
-      User user = GetUser(client.SteamId);
+      User user = GetUser( client.SteamId );
       Group group = user?.Group ?? Bundle.Options.DefaultGroup;
 
       // Add group metadata
-      if (group?.Metadata != null)
+      if ( group?.Metadata != null )
       {
-        foreach ((string key, string value) in group.Metadata)
+        foreach ( (string key, string value) in group.Metadata )
         {
           metadata[key] = value;
         }
       }
 
       // Add group metadata
-      if (user?.Metadata != null)
+      if ( user?.Metadata != null )
       {
-        foreach ((string key, string value) in user.Metadata)
+        foreach ( (string key, string value) in user.Metadata )
         {
           metadata[key] = value;
         }
@@ -163,25 +163,30 @@ namespace PermissionSystem
     // {
     //   // 
     // }
-    private static ClientHasPermissionEventArgs DoClientHasPermissionEvent(ClientHasPermissionEventArgs args)
+    private static ClientHasPermissionEventArgs DoClientHasPermissionEvent( ClientHasPermissionEventArgs args )
     {
+      if ( args.Handled )
+      {
+        return args;
+      }
+
       // Check if client is null / invalid
-      if (args.Client?.IsValid() != true)
+      if ( args.Client?.IsValid() != true )
       {
         args.Handled = true;
         args.HasPermission = false;
         return args;
       }
 
-      User user = GetUser(args.Client.SteamId);
+      User user = GetUser( args.Client.SteamId );
       Group group = user?.Group ?? Bundle.Options.DefaultGroup;
 
       // Check if permission for this command exists in the user overrides
-      if (user != null)
+      if ( user != null )
       {
-        foreach (Permission permission in user.Permissions)
+        foreach ( Permission permission in user.Permissions )
         {
-          if (Regex.IsMatch(args.Command, WildCardToRegular(permission.Pattern)))
+          if ( Regex.IsMatch( args.Command, WildCardToRegular( permission.Pattern ) ) )
           {
             args.Handled = true;
             args.HasPermission = permission.Enabled ?? true;
@@ -191,11 +196,11 @@ namespace PermissionSystem
       }
 
       // Check if permission for this command exists in the group
-      if (group != null)
+      if ( group != null )
       {
-        foreach (Permission permission in group.Permissions)
+        foreach ( Permission permission in group.Permissions )
         {
-          if (Regex.IsMatch(args.Command, WildCardToRegular(permission.Pattern)))
+          if ( Regex.IsMatch( args.Command, WildCardToRegular( permission.Pattern ) ) )
           {
             args.Handled = true;
             args.HasPermission = permission.Enabled ?? true;
@@ -205,19 +210,24 @@ namespace PermissionSystem
       }
       return args;
     }
-    private static ClientCanTargetEventArgs DoClientCanTargetEvent(ClientCanTargetEventArgs args)
+    private static ClientCanTargetEventArgs DoClientCanTargetEvent( ClientCanTargetEventArgs args )
     {
+      if ( args.Handled )
+      {
+        return args;
+      }
+
       // We're guaranteed to be able to handle this
       args.Handled = true;
 
       // Check if client is null / invalid
-      if (args.Client?.IsValid() != true || args.Target?.IsValid() != true)
+      if ( args.Client?.IsValid() != true || args.Target?.IsValid() != true )
       {
         args.HasPermission = false;
         return args;
       }
 
-      args.HasPermission = GetWeight(args.Client) >= GetImmunity(args.Client);
+      args.HasPermission = GetWeight( args.Client ) >= GetImmunity( args.Client );
 
       // args.HasPermission = args.Command.ToLower() == "noclip";
       return args;

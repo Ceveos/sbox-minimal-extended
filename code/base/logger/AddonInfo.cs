@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using MinimalExtended;
 using Sandbox;
 
-namespace Save
+namespace AddonLogger
 {
-  [Library("savemanager-info")]
+  [Library( "logger-info" )]
   public class AddonInfo : IAddonInfo
   {
-    public string Name => "SaveManager";
+    public string Name => "Logger";
 
-    public string Description => "Save and load data while abstracting the logic away";
+    public string Description => "Addon-designed console logging utility";
 
     public string Author => "Alex";
 
@@ -19,8 +19,7 @@ namespace Save
     public List<AddonDependency> Dependencies => new();
     public Dictionary<string, string> Metadata => new();
 
-    // No main class as the save manager should be instansiated by 
-    // the desired classes themselves.
     public Type MainClass => null;
+    public static IAddonInfo Instance => new AddonInfo();
   }
 }

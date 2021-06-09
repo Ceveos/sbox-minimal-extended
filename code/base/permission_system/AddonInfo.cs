@@ -5,7 +5,7 @@ using Sandbox;
 
 namespace PermissionSystem
 {
-  [Library("permission-system-info")]
+  [Library( "permission-system-info" )]
   public class AddonInfo : IAddonInfo
   {
     public string Name => "Permission System";
@@ -18,9 +18,15 @@ namespace PermissionSystem
 
     public List<AddonDependency> Dependencies => new()
     {
+      new AddonDependency()
+      {
+        Name = "Logger",
+        MinVersion = 1.0
+      }
     };
     public Dictionary<string, string> Metadata => new();
 
-    public Type MainClass => typeof(PermissionManager);
+    public Type MainClass => typeof( PermissionManager );
+    public static IAddonInfo Instance => new AddonInfo();
   }
 }

@@ -5,7 +5,7 @@ using Sandbox;
 
 namespace MinimalHud
 {
-  [Library("minimal-info")]
+  [Library( "minimal-info" )]
   public class AddonInfo : IAddonInfo
   {
     public string Name => "Minimal HUD";
@@ -16,7 +16,7 @@ namespace MinimalHud
 
     public double Version => 1.0;
 
-    public Type MainClass => typeof(MinimalGame);
+    public Type MainClass => typeof( MinimalGame );
 
     public List<AddonDependency> Dependencies => new()
     {
@@ -24,9 +24,15 @@ namespace MinimalHud
       {
         Name = "SaveManager",
         MinVersion = 1.0
+      },
+      new AddonDependency()
+      {
+        Name = "Logger",
+        MinVersion = 1.0
       }
     };
     public Dictionary<string, string> Metadata => new();
+    public static IAddonInfo Instance => new AddonInfo();
 
   }
 }
