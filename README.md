@@ -26,7 +26,21 @@ This is not, however, an admin suite on its own. Due to game modes having their 
 
 Gone are the days of needing to write your SQL information in every addon. Now, a common storage API can be used and customized to the servers needs.
 
-The save system allows any addon to store data (globally, or on a per-client level)
+The save system allows any addon to store data (globally, or on a per-client level). At the moment, the Save System only has a module to store data in RAM. Once S&box allows writing to files, this can be expanded to solutions such as JSON / SQLite / etc..
+
+## 3. Logger
+
+With so many addons, it can be a mess to understand the console output. The logger function prefixes every message with the addons name. Additionally, you can pass in a list of objects, and it'll automatically convert it into a human-readable string.
+
+If you use the following code, the Logger utility can take over the default `Log` function:
+
+```cs
+using Logger = AddonLogger.Logger;
+
+...
+
+private static readonly Logger Log = new( AddonInfo.Instance );
+```
 
 # FAQ
 
@@ -34,4 +48,11 @@ The save system allows any addon to store data (globally, or on a per-client lev
 
 Addons can be placed anywhere under the `/code/` directory (even nested). However, for consistency, it is recommended to place addons under the `/code/addons/` directory.
 
-## 
+## Does this have dependency checking?
+
+Yes, this template will check all the dependencies of your addons and ensure that they:
+
+1. Exist
+2. Have the required minimum version
+
+While most issues with dependencies will be caught at compile time due to the nature of using said dependencies, this is a fallback to catch errors early on in runtime. 
