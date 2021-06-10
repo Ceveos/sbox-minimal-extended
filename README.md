@@ -106,7 +106,9 @@ public static void OnHotLoad()
 
 With so many addons, it can be a mess to understand the console output. The logger function prefixes every message with the addons name. Additionally, you can pass in a list of objects, and it'll automatically convert it into a human-readable string.
 
-If you use the following code, the Logger utility can take over the default `Log` function:
+If your class inherits `AddonClass<T>`, then the logging utility will be overriden by default. 
+
+If your class does not inherit `AddonClass<T>`, then use the following code to ensure the Logger utility takes over the default `Log` function:
 
 ```cs
 using Logger = AddonLogger.Logger;
