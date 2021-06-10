@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Sandbox;
@@ -18,8 +19,8 @@ namespace MinimalExtended
 
     // Gmod Hot Reload breaks the dictionary / list if we inline instantiate it
     // Hence this ugly mess
-    private static Dictionary<string, IAddonInfo> _addon_dictionary;
-    private static Dictionary<string, IAddonInfo> AddonDictionary
+    private static Dictionary<string, BaseAddonInfo> _addon_dictionary;
+    private static Dictionary<string, BaseAddonInfo> AddonDictionary
     {
       get
       {
@@ -28,14 +29,14 @@ namespace MinimalExtended
         return _addon_dictionary;
       }
     }
-    private static List<AddonClass> _addons;
-    private static List<AddonClass> Addons
+    private static Dictionary<Type, IAutoload> _autoload;
+    private static Dictionary<Type, IAutoload> Autoload
     {
       get
       {
-        if ( _addons == null )
-          _addons = new();
-        return _addons;
+        if ( _autoload == null )
+          _autoload = new();
+        return _autoload;
       }
     }
     public static bool Addons_had_errors { private set; get; } = false;
@@ -126,20 +127,31 @@ namespace MinimalExtended
     /// </summary>
     public static void LoadAddons( bool reload_all = false )
     {
-      List<AddonClass> newlyLoadedAddons = new();
+      List<BaseAddonInfo> newlyLoadedAddons = new();
       if ( reload_all )
       {
-        foreach ( var addon in Addons )
+        foreach ( var addon in Autoload.Values )
         {
           addon.Dispose();
         }
 
-        Addons.Clear();
+        Autoload.Clear();
         AddonDictionary.Clear();
       }
-      Library.GetAll<IAddonInfo>().ToList().ForEach( x =>
+      else
       {
-        var addonInfo = Library.Create<IAddonInfo>( x );
+        foreach ( var addon in Autoload.Keys.ToList() )
+        {
+          if ( Autoload[addon].ReloadOnHotload )
+          {
+            Autoload[addon].Dispose();
+            Autoload.Remove( addon );
+          }
+        }
+      }
+      Library.GetAll<BaseAddonInfo>().ToList().ForEach( x =>
+      {
+        var addonInfo = Library.Create<BaseAddonInfo>( x );
         if ( AddonDictionary.ContainsKey( addonInfo.Name ) )
         {
           if ( reload_all )
@@ -149,16 +161,16 @@ namespace MinimalExtended
           return;
         }
         AddonDictionary.Add( addonInfo.Name, addonInfo );
-        // Don't add classes that require generics as it should be instantiated elsewhere 
-        if (
-          addonInfo.MainClass != null &&
-          !addonInfo.MainClass.IsAbstract &&
-          !addonInfo.MainClass.ContainsGenericParameters
-        )
+        newlyLoadedAddons.Add( addonInfo );
+      } );
+
+      // Init all new autoload classes
+      Library.GetAll<IAutoload>().ToList().ForEach( x =>
+      {
+        if ( !x.IsAbstract && !x.ContainsGenericParameters &&
+         !Autoload.ContainsKey( x ) )
         {
-          AddonClass addonInstance = Library.Create<AddonClass>( addonInfo.MainClass );
-          Addons.Add( addonInstance );
-          newlyLoadedAddons.Add( addonInstance );
+          Autoload.Add( x, Library.Create<IAutoload>( x ) );
         }
       } );
 

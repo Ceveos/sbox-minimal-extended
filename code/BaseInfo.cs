@@ -4,19 +4,19 @@ using Sandbox;
 
 namespace MinimalExtended
 {
-  [Library("base-info")]
-  public class BaseInfo : IAddonInfo
+  [Library( "base-info" )]
+  public class BaseInfo : BaseAddonInfo
   {
-    public string Name => "Minimal Extended";
+    public static BaseAddonInfo Instance => new BaseInfo();
+    public override string Name => "Minimal Extended";
 
-    public string Description => "Base game template; controls lifecycle of addons";
+    public override string Description => "Base game template; controls lifecycle of addons";
 
-    public string Author => "Alex";
+    public override string Author => "Alex";
 
-    public double Version => 1.0;
-    public Type MainClass => null;
+    public override double Version => 1.0;
 
-    public List<AddonDependency> Dependencies => new()
+    public override List<AddonDependency> Dependencies => new()
     {
       new AddonDependency()
       {
@@ -24,9 +24,5 @@ namespace MinimalExtended
         MinVersion = 1.0
       }
     };
-
-    public Dictionary<string, string> Metadata => new();
-
-    public static IAddonInfo Instance => new BaseInfo();
   }
 }

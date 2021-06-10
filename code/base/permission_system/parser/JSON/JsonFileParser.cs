@@ -1,15 +1,12 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using Sandbox;
-using Logger = AddonLogger.Logger;
 
 namespace PermissionSystem
 {
   public class JsonFileParser : FileParserBase
   {
-    private static readonly Logger Log = new( AddonInfo.Instance );
     private PermissionBundle _permissionBundle;
     public PermissionBundle PermissionBundle
     {

@@ -12,28 +12,26 @@ namespace IsOdd
   /// <summary>
   /// Isn't it odd?
   /// </summary>
-  [Library("is-odd")]
-  public partial class IsOdd : AddonClass
+  [Library( "is-odd" )]
+  public partial class IsOdd : IsOddAddon
   {
-    public static bool Odd(int number)
+    public static bool Odd( int number )
     {
       // Support negatives
-      number = Math.Abs(number);
-      while (number > 0)
+      number = Math.Abs( number );
+      while ( number > 0 )
       {
         number -= 2;
       }
-      if (number == 0)
+      if ( number == 0 )
       {
         return false;
       }
-      if (number < 0)
+      if ( number < 0 )
       {
         return true;
       }
       return false;
     }
-
   }
-
 }

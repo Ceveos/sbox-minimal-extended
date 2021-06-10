@@ -6,20 +6,15 @@ using Sandbox;
 namespace IsOdd
 {
   [Library( "is-odd-info" )]
-  public class AddonInfo : IAddonInfo
+  public class AddonInfo : BaseAddonInfo
   {
-    public string Name => "Is_Odd";
+    public override string Name => "Is_Odd";
 
-    public string Description => "Isn't it odd?";
+    public override string Description => "Isn't it odd?";
 
-    public string Author => "Alex";
+    public override string Author => "Alex";
 
-    public double Version => 1.1;
-
-    public List<AddonDependency> Dependencies => new();
-    public Dictionary<string, string> Metadata => new();
-
-    public Type MainClass => null;
-    public static IAddonInfo Instance => new AddonInfo();
+    public override double Version => 1.1;
   }
+  public class IsOddAddon : AddonClass<AddonInfo> { }
 }

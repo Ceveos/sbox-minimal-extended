@@ -12,7 +12,7 @@ namespace AddonLogger
   /// Addon-friendly logging utility
   /// </summary>
   [Library( "logger" )]
-  public partial class Logger : AddonClass
+  public partial class Logger : AddonClass<BaseAddonInfo>
   {
     private readonly string _title;
     public Logger( string title )
@@ -32,9 +32,9 @@ namespace AddonLogger
     {
       _title = library.ClassInfo.Title;
     }
-    public Logger( IAddonInfo addon )
+    public Logger( BaseAddonInfo addon )
     {
-      _title = addon.Name;
+      _title = addon?.Name ?? "NULL";
     }
 
     public static string CraftMessage( string title, params object[] args )
@@ -47,52 +47,52 @@ namespace AddonLogger
 
     public static void Trace( string title, params object[] args )
     {
-      Log.Trace( CraftMessage( title, args ) );
+      Sandbox.Log.Trace( CraftMessage( title, args ) );
     }
     public static void Info( string title, params object[] args )
     {
-      Log.Info( CraftMessage( title, args ) );
+      Sandbox.Log.Info( CraftMessage( title, args ) );
     }
     public static void Warning( string title, params object[] args )
     {
-      Log.Warning( CraftMessage( title, args ) );
+      Sandbox.Log.Warning( CraftMessage( title, args ) );
     }
     public static void Warning( Exception exception, string title, params object[] args )
     {
-      Log.Warning( exception, CraftMessage( title, args ) );
+      Sandbox.Log.Warning( exception, CraftMessage( title, args ) );
     }
     public static void Error( string title, params object[] args )
     {
-      Log.Error( CraftMessage( title, args ) );
+      Sandbox.Log.Error( CraftMessage( title, args ) );
     }
     public static void Error( Exception exception, string title, params object[] args )
     {
-      Log.Error( exception, CraftMessage( title, args ) );
+      Sandbox.Log.Error( exception, CraftMessage( title, args ) );
     }
     public void Trace( params object[] args )
     {
-      Log.Trace( CraftMessage( _title, args ) );
+      Sandbox.Log.Trace( CraftMessage( _title, args ) );
     }
     public void Info( params object[] args )
     {
-      Log.Info( CraftMessage( _title, args ) );
+      Sandbox.Log.Info( CraftMessage( _title, args ) );
     }
     public void Warning( params object[] args )
     {
-      Log.Warning( CraftMessage( _title, args ) );
+      Sandbox.Log.Warning( CraftMessage( _title, args ) );
     }
     public void Warning( Exception exception, params object[] args )
     {
-      Log.Warning( exception, CraftMessage( _title, args ) );
+      Sandbox.Log.Warning( exception, CraftMessage( _title, args ) );
     }
 
     public void Error( params object[] args )
     {
-      Log.Error( CraftMessage( _title, args ) );
+      Sandbox.Log.Error( CraftMessage( _title, args ) );
     }
     public void Error( Exception exception, params object[] args )
     {
-      Log.Error( exception, CraftMessage( _title, args ) );
+      Sandbox.Log.Error( exception, CraftMessage( _title, args ) );
     }
   }
 

@@ -6,19 +6,18 @@ using Sandbox;
 namespace MinimalHud
 {
   [Library( "minimal-info" )]
-  public class AddonInfo : IAddonInfo
+  public class AddonInfo : BaseAddonInfo
   {
-    public string Name => "Minimal HUD";
+    public override string Name => "Minimal HUD";
 
-    public string Description => "Sample addon that just renders a HUD";
+    public override string Description => "Sample addon that just renders a HUD";
 
-    public string Author => "Alex";
+    public override string Author => "Alex";
 
-    public double Version => 1.0;
+    public override double Version => 1.0;
 
-    public Type MainClass => typeof( MinimalGame );
 
-    public List<AddonDependency> Dependencies => new()
+    public override List<AddonDependency> Dependencies => new()
     {
       new AddonDependency()
       {
@@ -31,8 +30,6 @@ namespace MinimalHud
         MinVersion = 1.0
       }
     };
-    public Dictionary<string, string> Metadata => new();
-    public static IAddonInfo Instance => new AddonInfo();
-
   }
+  public class MinimalHudAddon : AddonClass<AddonInfo> { }
 }

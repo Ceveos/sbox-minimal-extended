@@ -1,14 +1,14 @@
 using Sandbox;
 using MinimalExtended;
-using Logger = AddonLogger.Logger;
 
 namespace SandboxGame
 {
   [Library( "sandbox" )]
-  public partial class SandboxGame : AddonClass
+  public partial class SandboxGame : SandboxAddon, IAutoload
   {
-    private static readonly Logger Log = new( AddonInfo.Instance );
     private readonly SandboxHud _sandboxHud;
+
+    public bool ReloadOnHotload { get; } = false;
 
     [Event( "hotloaded" )]
     public void hotload()

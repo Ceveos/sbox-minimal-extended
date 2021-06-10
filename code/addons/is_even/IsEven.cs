@@ -12,12 +12,12 @@ namespace IsEven
   /// <summary>
   /// But is it even?
   /// </summary>
-  [Library("is-even")]
-  public partial class IsEven : AddonClass
+  [Library( "is-even" )]
+  public partial class IsEven : IsEvenAddon
   {
-    public static bool Even(int number)
+    public static bool Even( int number )
     {
-      return !IsOdd.IsOdd.Odd(number);
+      return !IsOdd.IsOdd.Odd( number );
     }
 
   }

@@ -5,10 +5,9 @@ using Logger = AddonLogger.Logger;
 namespace PermissionSystem
 {
   [Library( "permission-manager" )]
-  public class PermissionManager : AddonClass
+  public class PermissionManager : PermissionAddon
   {
-    private static readonly Logger Log = new( AddonInfo.Instance );
-    public override void Initialize()
+    public PermissionManager()
     {
       if ( IsServer && !Permissions.IsInitialized )
       {

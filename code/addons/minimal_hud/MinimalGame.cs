@@ -1,8 +1,5 @@
-﻿using System;
-
-using MinimalExtended;
+﻿using MinimalExtended;
 using Sandbox;
-using Logger = AddonLogger.Logger;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
@@ -21,10 +18,12 @@ namespace MinimalHud
   /// as your game addon. If it isn't then we won't be able to find it.
   /// </summary>
   [Library( "minimal-hud" )]
-  public partial class MinimalGame : AddonClass
+  public partial class MinimalGame : MinimalHudAddon, IAutoload
   {
-    private static readonly Logger Log = new( AddonInfo.Instance );
     readonly MinimalHudEntity hudEntity;
+
+    public bool ReloadOnHotload => false;
+
     public MinimalGame()
     {
       if ( IsServer )

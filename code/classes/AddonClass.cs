@@ -6,8 +6,33 @@ namespace MinimalExtended
   /// Used to dictate that a C# file is an addon. Should be the entrypoint of your addon.
   /// Derives from LibraryClass, and manages the Event lifecycle for you.
   /// </summary>
-  public abstract class AddonClass : LibraryClass, IDisposable
+  public abstract class AddonClass<T> : LibraryClass, IDisposable where T : BaseAddonInfo, new()
   {
+    private static T _info { get; set; }
+    public static T Info
+    {
+      get
+      {
+        if ( _info == null )
+        {
+          _info = new T();
+        }
+        return _info;
+      }
+    }
+
+    private static AddonLogger.Logger _log { get; set; }
+    public static AddonLogger.Logger Log
+    {
+      get
+      {
+        if ( _log == null )
+        {
+          _log = new AddonLogger.Logger( Info );
+        }
+        return _log;
+      }
+    }
 
     /// <summary>
     /// Is this code running in the server?
@@ -18,8 +43,6 @@ namespace MinimalExtended
     /// Is this code running in the client?
     /// </summary>
     public static bool IsClient => Host.IsClient;
-
-    public virtual void Initialize() { }
 
     /// <summary>
     /// Ensures that the addon class listens to event triggers
