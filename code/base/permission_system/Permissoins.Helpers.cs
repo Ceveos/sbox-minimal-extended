@@ -6,75 +6,52 @@ namespace PermissionSystem
 {
   public static partial class Permissions
   {
-    private static string WildCardToRegular(string value)
+    private static string WildCardToRegular( string value )
     {
-      return "^" + Regex.Escape(value).Replace("\\?", ".").Replace("\\*", ".*") + "$";
+      return "^" + Regex.Escape( value ).Replace( "\\?", "." ).Replace( "\\*", ".*" ) + "$";
     }
 
-    public static int GetImmunity(Client client)
+    public static int GetImmunity( Client client )
     {
-      User user = GetUser(client.SteamId);
+      User user = GetUser( client.SteamId );
 
       Group userGroup = user?.Group ?? Bundle.Options.DefaultGroup;
 
-      int? userWeight = null;
-      if (user != null)
-      {
-        if (user.Immunity != null)
-        {
-          return (int)user.Immunity;
-        }
-        userWeight = user.Weight;
-      }
-
-      if (userGroup?.Immunity != null)
-      {
-        return (int)userGroup.Immunity;
-      }
-      return userWeight ?? 0;
+      return user?.Immunity ?? userGroup.Immunity;
     }
-    public static int GetWeight(Client client)
+    public static int GetWeight( Client client )
     {
-      User user = GetUser(client.SteamId);
+      User user = GetUser( client.SteamId );
 
       Group userGroup = user?.Group ?? Bundle.Options.DefaultGroup;
 
-      if (user != null && user.Weight != null)
-      {
-        return (int)user.Weight;
-      }
-
-      if (userGroup?.Weight != null)
-      {
-        return (int)userGroup.Weight;
-      }
-      return 0;
+      return user?.Weight ?? userGroup.Weight;
     }
-    public static Group GetGroup(string group)
+    public static Group GetGroup( string group )
     {
-      return GroupExists(group) ? Bundle.Groups[group] : null;
+      return GroupExists( group ) ? Bundle.Groups[group] : null;
     }
-    public static bool GroupExists(string group)
+    public static bool GroupExists( string group )
     {
-      return Bundle.Groups.ContainsKey(group);
+      return Bundle.Groups.ContainsKey( group );
     }
 
-    public static User GetUser(ulong steamId)
+    public static User GetUser( ulong steamId )
     {
-      return GetUser(steamId.ToString());
+      return GetUser( steamId.ToString() );
     }
-    public static User GetUser(string steamId)
+    public static User GetUser( string steamId )
     {
-      return UserExists(steamId) ? Bundle.Users[steamId] : null;
+      return UserExists( steamId ) ? Bundle.Users[steamId] : null;
     }
 
-    public static bool UserExists(ulong steamId)
+    public static bool UserExists( ulong steamId )
     {
-      return UserExists(steamId.ToString());
+      return UserExists( steamId.ToString() );
     }
-    public static bool UserExists(string steamId)
+    public static bool UserExists( string steamId )
     {
-      return Bundle.Users.ContainsKey(steamId.ToString());
+      return Bundle.Users.ContainsKey( steamId.ToString() );
     }
   }
 }

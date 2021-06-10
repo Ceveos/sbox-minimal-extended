@@ -1,0 +1,204 @@
+// 
+// Tool : Carriable 
+// 
+@SolidClass = weapon_tool : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
+
+// 
+// BalloonEntity : Sandbox.Prop 
+// 
+@SolidClass  model() 
+metadata
+{
+}
+= ent_balloon : ""
+[
+	model(studio) [report]: "World Model"
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
+	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	collisiongroupoverride(integer) : "CollisionGroupOverride" :  : ""
+
+]
+
+// 
+// BouncyBallEntity : Sandbox.Prop 
+// 
+@SolidClass  model() 
+metadata
+{
+}
+= ent_bouncyball : ""
+[
+	model(studio) [report]: "World Model"
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
+	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	collisiongroupoverride(integer) : "CollisionGroupOverride" :  : ""
+
+]
+
+// 
+// DirectionalGravity : Sandbox.Prop 
+// 
+@SolidClass  model() 
+metadata
+{
+}
+= directional_gravity : ""
+[
+	model(studio) [report]: "World Model"
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
+	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	collisiongroupoverride(integer) : "CollisionGroupOverride" :  : ""
+
+]
+
+// 
+// DroneEntity : Sandbox.Prop 
+// 
+@SolidClass  model() 
+metadata
+{
+}
+= ent_drone : ""
+[
+	model(studio) [report]: "World Model"
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
+	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	collisiongroupoverride(integer) : "CollisionGroupOverride" :  : ""
+
+]
+
+// 
+// LampEntity : Sandbox.SpotLightEntity 
+// 
+@SolidClass = ent_lamp : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	input TurnOn(void) : ""
+	input TurnOff(void) : ""
+	input Toggle(void) : ""
+	input SetLightColor(void) : ""
+	input SetLightBrightness(float) : ""
+	input SetAppearance(integer) : ""
+	input SetCustomAppearance(string) : ""
+]
+
+// 
+// LightEntity : Sandbox.PointLightEntity 
+// 
+@SolidClass = ent_light : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	input TurnOn(void) : ""
+	input TurnOff(void) : ""
+	input Toggle(void) : ""
+	input SetLightColor(void) : ""
+	input SetLightBrightness(float) : ""
+	input SetAppearance(integer) : ""
+	input SetCustomAppearance(string) : ""
+]
+
+// 
+// NoiseTest : Sandbox.Prop 
+// 
+@SolidClass  model() 
+metadata
+{
+}
+= noise_test : ""
+[
+	model(studio) [report]: "World Model"
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
+	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	collisiongroupoverride(integer) : "CollisionGroupOverride" :  : ""
+
+]
+
+// 
+// ThrusterEntity : Sandbox.Prop 
+// 
+@SolidClass  model() 
+metadata
+{
+}
+= ent_thruster : ""
+[
+	model(studio) [report]: "World Model"
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
+	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	collisiongroupoverride(integer) : "CollisionGroupOverride" :  : ""
+
+]
+
+// 
+// WheelEntity : Sandbox.Prop 
+// 
+@SolidClass  model() 
+metadata
+{
+}
+= ent_wheel : ""
+[
+	model(studio) [report]: "World Model"
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
+	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	collisiongroupoverride(integer) : "CollisionGroupOverride" :  : ""
+
+]
+
+// 
+// Flashlight : Weapon 
+// 
+@SolidClass = flashlight : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
+
+// 
+// GravGun : Carriable 
+// 
+@SolidClass = gravgun : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
+
+// 
+// PhysGun : Carriable 
+// 
+@SolidClass = physgun : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
+
+// 
+// Gun : Weapon 
+// 
+@SolidClass = gun : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
+
+// 
+// MinimalExtended.MinimalExtendedGame : Sandbox.Game 
+// 
+@PointClass = minimal-extended : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
+

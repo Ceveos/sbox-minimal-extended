@@ -65,40 +65,114 @@ namespace PermissionSystem
     {
       Dictionary<string, Group> groups = new();
 
-      if ( jsonGroups?.Count > 0 )
+      if ( jsonGroups?.Count == 0 )
       {
-        foreach ( JsonGroup jsonGroup in jsonGroups )
+        Log.Error( "No groups found in permissions file" );
+        throw new Exception( "No groups found in permissions file" );
+      }
+
+      foreach ( JsonGroup jsonGroup in jsonGroups )
+      {
+        Group group = new();
+
+        group.Name = jsonGroup.name;
+        group.Weight = jsonGroup.weight ?? Int32.MinValue;
+        group.Immunity = jsonGroup.immunity ?? Int32.MinValue;
+        group.Roles = jsonGroup.roles;
+        group.Metadata = Convert( jsonGroup.metadata );
+
+        groups.Add( group.Name, group );
+      }
+
+      // Link inheritance once all groups established
+      foreach ( JsonGroup jsonGroup in jsonGroups )
+      {
+        if ( jsonGroup.inherits != null && groups.ContainsKey( jsonGroup.inherits ) )
         {
-          Group group = new();
-
-          group.Name = jsonGroup.name;
-          group.Weight = jsonGroup.weight;
-          group.Immunity = jsonGroup.immunity ?? jsonGroup.weight + 1;
-          group.Roles = jsonGroup.roles;
-          group.Metadata = Convert( jsonGroup.metadata );
-
-          groups.Add( group.Name, group );
-        }
-
-        // Link inheritance once all groups established
-        foreach ( JsonGroup jsonGroup in jsonGroups )
-        {
-          if ( jsonGroup.inherits != null && groups.ContainsKey( jsonGroup.inherits ) )
+          if ( jsonGroup.inherits == jsonGroup.name )
           {
-            if ( jsonGroup.inherits == jsonGroup.name )
-            {
-              Log.Error( $"{jsonGroup.name} Group cannot inherit from itself" );
-            }
-            else
-            {
-              groups[jsonGroup.name].InheritsFrom = groups[jsonGroup.inherits];
-            }
+            Log.Error( $"{jsonGroup.name} Group cannot inherit from itself" );
+          }
+          else
+          {
+            groups[jsonGroup.name].InheritsFrom = groups[jsonGroup.inherits];
           }
         }
       }
-      else
+
+      // Check for circular dependency
+      foreach ( Group group in groups.Values )
       {
-        Log.Error( "No groups found in permissions file" );
+        if ( group.InheritsFrom == null )
+        {
+          continue;
+        }
+
+        Group mergedGroup = group;
+        Group currentGroup = group.InheritsFrom;
+        List<string> groupsVisited = new();
+        groupsVisited.Add( mergedGroup.Name );
+
+        while ( currentGroup != null )
+        {
+          if ( groupsVisited.Contains( currentGroup.Name ) )
+          {
+            Log.Error( $"Circular inheritance detected for group {currentGroup.Name}" );
+            break;
+          }
+
+          groupsVisited.Add( currentGroup.Name );
+
+          // Set weight / immunity if applicable
+          if ( mergedGroup.Weight == Int32.MinValue && currentGroup.Weight != Int32.MinValue )
+          {
+            mergedGroup.Weight = currentGroup.Weight;
+          }
+
+          if ( mergedGroup.Immunity == Int32.MinValue && currentGroup.Immunity != Int32.MinValue )
+          {
+            mergedGroup.Immunity = currentGroup.Immunity;
+          }
+
+          // Copy over new metadata
+          if ( currentGroup.Metadata != null )
+          {
+            mergedGroup.Metadata ??= new();
+            foreach ( (string key, string value) in currentGroup.Metadata )
+            {
+              if ( !mergedGroup.Metadata.ContainsKey( key ) )
+              {
+                mergedGroup.Metadata.Add( key, value );
+              }
+            }
+          }
+
+          // Copy over roles
+          if ( currentGroup.Roles != null )
+          {
+            mergedGroup.Roles ??= new();
+            foreach ( string role in currentGroup.Roles )
+            {
+              if ( !mergedGroup.Roles.Contains( role ) )
+              {
+                mergedGroup.Roles.Add( role );
+              }
+            }
+          }
+
+          currentGroup = currentGroup.InheritsFrom;
+        }
+
+        // Give weight / immunity a valid value if they were not set
+        if ( mergedGroup.Weight == Int32.MinValue )
+        {
+          Log.Warning( $"{mergedGroup.Name} group has no valid weight; defaulting to 0" );
+          mergedGroup.Weight = 0;
+        }
+        if ( mergedGroup.Immunity == Int32.MinValue )
+        {
+          mergedGroup.Immunity = mergedGroup.Weight + 1;
+        }
       }
 
       return groups;
@@ -187,32 +261,9 @@ namespace PermissionSystem
 
         Group mergedGroup = group;
         Group currentGroup = group.InheritsFrom;
-        List<string> groupsVisited = new();
-        groupsVisited.Add( mergedGroup.Name );
 
         while ( currentGroup != null )
         {
-          if ( groupsVisited.Contains( currentGroup.Name ) )
-          {
-            Log.Error( $"Circular inheritance detected for group {currentGroup.Name}" );
-            break;
-          }
-
-          groupsVisited.Add( currentGroup.Name );
-
-          if ( mergedGroup.Weight == null && currentGroup.Weight != null )
-          {
-            mergedGroup.Weight = currentGroup.Weight;
-          }
-          if ( mergedGroup.Immunity == null && mergedGroup.Weight != null )
-          {
-            mergedGroup.Immunity = mergedGroup.Weight + 1;
-          }
-          if ( mergedGroup.Immunity == null && currentGroup.Immunity != null )
-          {
-            mergedGroup.Immunity = currentGroup.Immunity;
-          }
-
           // Copy over new permissions
           if ( currentGroup.Permissions != null )
           {
@@ -224,39 +275,12 @@ namespace PermissionSystem
                 mergedGroup.Permissions.Add( permission );
               }
             }
-
           }
 
-          // Copy over new metadata
-          if ( currentGroup.Metadata != null )
-          {
-            mergedGroup.Metadata ??= new();
-            foreach ( (string key, string value) in currentGroup.Metadata )
-            {
-              if ( !mergedGroup.Metadata.ContainsKey( key ) )
-              {
-                mergedGroup.Metadata.Add( key, value );
-              }
-            }
-          }
-
-          // Copy over roles
-          if ( currentGroup.Roles != null )
-          {
-            mergedGroup.Roles ??= new();
-            foreach ( string role in currentGroup.Roles )
-            {
-              if ( !mergedGroup.Roles.Contains( role ) )
-              {
-                mergedGroup.Roles.Add( role );
-              }
-            }
-          }
-
+          // Circular dependency already checked
           currentGroup = currentGroup.InheritsFrom;
         }
       }
-
 
       // Return combined bundle
       return new PermissionBundle()

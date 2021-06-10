@@ -157,12 +157,6 @@ namespace PermissionSystem
 
       return metadata;
     }
-
-    // TODO: Can you get client from Player?
-    // private static PlayerHasPermissionEventArgs DoPlayerHasPermissionEvent(PlayerHasPermissionEventArgs args)
-    // {
-    //   // 
-    // }
     private static ClientHasPermissionEventArgs DoClientHasPermissionEvent( ClientHasPermissionEventArgs args )
     {
       if ( args.Handled )
