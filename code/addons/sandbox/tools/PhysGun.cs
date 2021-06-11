@@ -50,18 +50,17 @@ public partial class PhysGun : Carriable
 		var owner = Owner as Player;
 		if ( owner == null ) return;
 
-		var input = Input;
 		var eyePos = owner.EyePos;
 		var eyeDir = owner.EyeRot.Forward;
 		var eyeRot = Rotation.From( new Angles( 0.0f, owner.EyeRot.Angles().yaw, 0.0f ) );
 
-		if ( !grabbing && input.Pressed( InputButton.Attack1 ) )
+		if ( !grabbing && Input.Pressed( InputButton.Attack1 ) )
 		{
 			grabbing = true;
 		}
 
-		bool grabEnabled = grabbing && input.Down( InputButton.Attack1 );
-		bool wantsToFreeze = input.Pressed( InputButton.Attack2 );
+		bool grabEnabled = grabbing && Input.Down( InputButton.Attack1 );
+		bool wantsToFreeze = Input.Pressed( InputButton.Attack2 );
 
 		if ( IsClient && wantsToFreeze )
 		{
@@ -82,7 +81,7 @@ public partial class PhysGun : Carriable
 				{
 					if ( heldBody.IsValid() )
 					{
-						UpdateGrab( input, eyePos, eyeRot, eyeDir, wantsToFreeze );
+						UpdateGrab( eyePos, eyeRot, eyeDir, wantsToFreeze );
 					}
 					else
 					{
@@ -163,7 +162,7 @@ public partial class PhysGun : Carriable
 		}
 	}
 
-	private void UpdateGrab( UserInput input, Vector3 eyePos, Rotation eyeRot, Vector3 eyeDir, bool wantsToFreeze )
+	private void UpdateGrab( Vector3 eyePos, Rotation eyeRot, Vector3 eyeDir, bool wantsToFreeze )
 	{
 		if ( wantsToFreeze )
 		{
@@ -179,17 +178,17 @@ public partial class PhysGun : Carriable
 			return;
 		}
 
-		MoveTargetDistance( input.MouseWheel * TargetDistanceSpeed );
+		MoveTargetDistance( Input.MouseWheel * TargetDistanceSpeed );
 
-		bool rotating = input.Down( InputButton.Use );
+		bool rotating = Input.Down( InputButton.Use );
 		bool snapping = false;
 
 		if ( rotating )
 		{
-			EnableAngularSpring( input.Down( InputButton.Run ) ? 100.0f : 0.0f );
-			DoRotate( eyeRot, input.MouseDelta * RotateSpeed );
+			EnableAngularSpring( Input.Down( InputButton.Run ) ? 100.0f : 0.0f );
+			DoRotate( eyeRot, Input.MouseDelta * RotateSpeed );
 
-			snapping = input.Down( InputButton.Run );
+			snapping = Input.Down( InputButton.Run );
 		}
 		else
 		{

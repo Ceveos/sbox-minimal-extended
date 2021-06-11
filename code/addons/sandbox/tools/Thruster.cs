@@ -32,14 +32,12 @@
 
 			using ( Prediction.Off() )
 			{
-				var input = Owner.Input;
-
-				if ( input.Pressed( InputButton.Attack2 ) )
+				if ( Input.Pressed( InputButton.Attack2 ) )
 				{
 					massless = !massless;
 				}
 
-				if ( !input.Pressed( InputButton.Attack1 ) )
+				if ( !Input.Pressed( InputButton.Attack1 ) )
 					return;
 
 				var startPos = Owner.EyePos;

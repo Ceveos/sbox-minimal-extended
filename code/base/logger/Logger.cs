@@ -49,7 +49,7 @@ namespace AddonLogger
     {
       Sandbox.Log.Trace( CraftMessage( title, args ) );
     }
-    public static void Info( string title, params object[] args )
+    public static new void Info( string title, params object[] args )
     {
       Sandbox.Log.Info( CraftMessage( title, args ) );
     }
@@ -73,7 +73,7 @@ namespace AddonLogger
     {
       Sandbox.Log.Trace( CraftMessage( _title, args ) );
     }
-    public void Info( params object[] args )
+    public new void Info( params object[] args )
     {
       Sandbox.Log.Info( CraftMessage( _title, args ) );
     }
