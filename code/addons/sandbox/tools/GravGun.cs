@@ -21,7 +21,7 @@ public partial class GravGun : Carriable
 	protected virtual float LinearDampingRatio => 1.0f;
 	protected virtual float AngularFrequency => 10.0f;
 	protected virtual float AngularDampingRatio => 1.0f;
-	protected virtual float PullForce => 10.0f;
+	protected virtual float PullForce => 20.0f;
 	protected virtual float PushForce => 1000.0f;
 	protected virtual float ThrowForce => 2000.0f;
 	protected virtual float HoldDistance => 100.0f;
@@ -52,7 +52,6 @@ public partial class GravGun : Carriable
 
 		using ( Prediction.Off() )
 		{
-			var input = Input;
 			var eyePos = owner.EyePos;
 			var eyeRot = owner.EyeRot;
 			var eyeDir = owner.EyeRot.Forward;
@@ -63,7 +62,7 @@ public partial class GravGun : Carriable
 				{
 					GrabEnd();
 				}
-				else if ( input.Pressed( InputButton.Attack1 ) )
+				else if ( Input.Pressed( InputButton.Attack1 ) )
 				{
 					if ( HeldBody.PhysicsGroup.BodyCount > 1 )
 					{
@@ -79,7 +78,7 @@ public partial class GravGun : Carriable
 
 					GrabEnd();
 				}
-				else if ( input.Pressed( InputButton.Attack2 ) )
+				else if ( Input.Pressed( InputButton.Attack2 ) )
 				{
 					timeSinceDrop = 0;
 
@@ -115,7 +114,7 @@ public partial class GravGun : Carriable
 
 			var body = tr.Body;
 
-			if ( input.Pressed( InputButton.Attack1 ) )
+			if ( Input.Pressed( InputButton.Attack1 ) )
 			{
 				if ( tr.Distance < MaxPushDistance && !IsBodyGrabbed( body ) )
 				{
@@ -123,7 +122,7 @@ public partial class GravGun : Carriable
 					body.ApplyImpulseAt( tr.EndPos, eyeDir * (body.Mass * (PushForce * pushScale)) );
 				}
 			}
-			else if ( input.Down( InputButton.Attack2 ) )
+			else if ( Input.Down( InputButton.Attack2 ) )
 			{
 				var physicsGroup = tr.Entity.PhysicsGroup;
 

@@ -96,14 +96,12 @@ public partial class DroneEntity : Prop, IPhysicsUpdate
 
 		using ( Prediction.Off() )
 		{
-			var input = owner.Input;
-
 			currentInput.Reset();
-			var x = (input.Down( InputButton.Forward ) ? -1 : 0) + (input.Down( InputButton.Back ) ? 1 : 0);
-			var y = (input.Down( InputButton.Right ) ? 1 : 0) + (input.Down( InputButton.Left ) ? -1 : 0);
+			var x = (Input.Down( InputButton.Forward ) ? -1 : 0) + (Input.Down( InputButton.Back ) ? 1 : 0);
+			var y = (Input.Down( InputButton.Right ) ? 1 : 0) + (Input.Down( InputButton.Left ) ? -1 : 0);
 			currentInput.movement = new Vector3( x, y, 0 ).Normal;
-			currentInput.throttle = (input.Down( InputButton.Run ) ? 1 : 0) + (input.Down( InputButton.Duck ) ? -1 : 0);
-			currentInput.yaw = -input.MouseDelta.x;
+			currentInput.throttle = (Input.Down( InputButton.Run ) ? 1 : 0) + (Input.Down( InputButton.Duck ) ? -1 : 0);
+			currentInput.yaw = -Input.MouseDelta.x;
 		}
 	}
 
