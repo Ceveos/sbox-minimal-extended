@@ -44,6 +44,7 @@ partial class Inventory : BaseInventory
 			return false;
 
 		ent.OnCarryDrop( Owner );
+
 		return ent.Parent == null;
 	}
 }
