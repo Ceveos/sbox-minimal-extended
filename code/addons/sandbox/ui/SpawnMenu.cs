@@ -15,54 +15,54 @@ public partial class SpawnMenu : Panel
   {
     Instance = this;
 
-    StyleSheet.Load("/ui/sandbox/SpawnMenu.scss");
+    StyleSheet.Load( "/ui/sandbox/SpawnMenu.scss" );
 
-    var left = Add.Panel("left");
+    var left = Add.Panel( "left" );
     {
       var tabs = left.AddChild<ButtonGroup>();
-      tabs.AddClass("tabs");
+      tabs.AddClass( "tabs" );
 
-      var body = left.Add.Panel("body");
+      var body = left.Add.Panel( "body" );
 
       {
         var props = body.AddChild<SpawnList>();
-        tabs.SelectedButton = tabs.AddButtonActive("Props", (b) => props.SetClass("active", b));
+        tabs.SelectedButton = tabs.AddButtonActive( "Props", ( b ) => props.SetClass( "active", b ) );
 
         var ents = body.AddChild<EntityList>();
-        tabs.AddButtonActive("Entities", (b) => ents.SetClass("active", b));
+        tabs.AddButtonActive( "Entities", ( b ) => ents.SetClass( "active", b ) );
       }
     }
 
-    var right = Add.Panel("right");
+    var right = Add.Panel( "right" );
     {
-      var tabs = right.Add.Panel("tabs");
+      var tabs = right.Add.Panel( "tabs" );
       {
-        tabs.Add.Button("Tools").AddClass("active");
-        tabs.Add.Button("Utility");
+        tabs.Add.Button( "Tools" ).AddClass( "active" );
+        tabs.Add.Button( "Utility" );
       }
-      var body = right.Add.Panel("body");
+      var body = right.Add.Panel( "body" );
       {
-        var list = body.Add.Panel("toollist");
+        var list = body.Add.Panel( "toollist" );
         {
-          foreach (var entry in Library.GetAllAttributes<Sandbox.Tools.BaseTool>())
+          foreach ( var entry in Library.GetAllAttributes<Sandbox.Tools.BaseTool>() )
           {
-            if (entry.Title == "Sandbox.Tools.BaseTool")
+            if ( entry.Title == "Sandbox.Tools.BaseTool" )
               continue;
 
-            var button = list.Add.Button(entry.Title);
-            button.SetClass("active", entry.Name == ConsoleSystem.GetValue("tool_current"));
+            var button = list.Add.Button( entry.Title );
+            button.SetClass( "active", entry.Name == ConsoleSystem.GetValue( "tool_current" ) );
 
-            button.AddEvent("onclick", () =>
-           {
-             ConsoleSystem.Run("tool_current", entry.Name);
-             ConsoleSystem.Run("inventory_current", "weapon_tool");
+            button.AddEvent( "onclick", () =>
+            {
+              ConsoleSystem.Run( "tool_current", entry.Name );
+              ConsoleSystem.Run( "inventory_current", "weapon_tool" );
 
-             foreach (var child in list.Children)
-               child.SetClass("active", child == button);
-           });
+              foreach ( var child in list.Children )
+                child.SetClass( "active", child == button );
+            } );
           }
         }
-        body.Add.Panel("inspector");
+        body.Add.Panel( "inspector" );
       }
     }
 
@@ -72,7 +72,7 @@ public partial class SpawnMenu : Panel
   {
     base.Tick();
 
-    Parent.SetClass("spawnmenuopen", Input.Down(InputButton.Menu));
+    Parent.SetClass( "spawnmenuopen", Input.Down( InputButton.Menu ) );
   }
 
 }
