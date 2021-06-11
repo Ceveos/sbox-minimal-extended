@@ -1,102 +1,99 @@
 ﻿
 using MinimalExtended;
 using Sandbox;
-using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-
-[Library("sandbox", Title = "Sandbox")]
-partial class SandboxGame : SandboxGameAddon.SandboxGameAddon, IAutoload
+namespace SandboxGameAddon
 {
-  private readonly SandboxHud _sandboxHud;
-  public bool ReloadOnHotload => false;
-
-  public SandboxGame()
+  [Library( "sandbox", Title = "Sandbox" )]
+  partial class SandboxGame : SandboxGameAddon, IAutoload
   {
-    if (IsServer)
+    private readonly SandboxHud _sandboxHud;
+    public bool ReloadOnHotload => false;
+
+    public SandboxGame()
     {
-      // Create the HUD
-      _sandboxHud = new SandboxHud();
-    }
-  }
-
-  public override void Dispose()
-  {
-    _sandboxHud?.Delete();
-    base.Dispose();
-  }
-
-  [Event("client.join")]
-  public void ClientJoined(Client cl)
-  {
-    var player = new SandboxPlayer();
-    player.Respawn();
-
-    cl.Pawn = player;
-  }
-
-  [ServerCmd("spawn")]
-  public static void Spawn(string modelname)
-  {
-    var owner = ConsoleSystem.Caller?.Pawn;
-
-    if (ConsoleSystem.Caller == null)
-      return;
-
-    var tr = Trace.Ray(owner.EyePos, owner.EyePos + owner.EyeRot.Forward * 500)
-      .UseHitboxes()
-      .Ignore(owner)
-      .Size(2)
-      .Run();
-
-    var ent = new Prop();
-    ent.Position = tr.EndPos;
-    ent.Rotation = Rotation.From(new Angles(0, owner.EyeRot.Angles().yaw, 0)) * Rotation.FromAxis(Vector3.Up, 180);
-    ent.SetModel(modelname);
-
-    // Drop to floor
-    if (ent.PhysicsBody != null && ent.PhysicsGroup.BodyCount == 1)
-    {
-      var p = ent.PhysicsBody.FindClosestPoint(tr.EndPos);
-
-      var delta = p - tr.EndPos;
-      ent.PhysicsBody.Position -= delta;
-      //DebugOverlay.Line( p, tr.EndPos, 10, false );
+      if ( IsServer )
+      {
+        // Create the HUD
+        _sandboxHud = new SandboxHud();
+      }
     }
 
-  }
-
-  [ServerCmd("spawn_entity")]
-  public static void SpawnEntity(string entName)
-  {
-    var owner = ConsoleSystem.Caller.Pawn;
-
-    if (owner == null)
-      return;
-
-    var attribute = Library.GetAttribute(entName);
-
-    if (attribute == null || !attribute.Spawnable)
-      return;
-
-    var tr = Trace.Ray(owner.EyePos, owner.EyePos + owner.EyeRot.Forward * 200)
-      .UseHitboxes()
-      .Ignore(owner)
-      .Size(2)
-      .Run();
-
-    var ent = Library.Create<Entity>(entName);
-    if (ent is BaseCarriable && owner.Inventory != null)
+    public override void Dispose()
     {
-      if (owner.Inventory.Add(ent, true))
+      _sandboxHud?.Delete();
+      base.Dispose();
+    }
+
+    [Event( "client.join" )]
+    public void ClientJoined( Client cl )
+    {
+      var player = new SandboxPlayer();
+      player.Respawn();
+
+      cl.Pawn = player;
+    }
+
+    [ServerCmd( "spawn" )]
+    public static void Spawn( string modelname )
+    {
+      var owner = ConsoleSystem.Caller?.Pawn;
+
+      if ( ConsoleSystem.Caller == null )
         return;
+
+      var tr = Trace.Ray( owner.EyePos, owner.EyePos + owner.EyeRot.Forward * 500 )
+        .UseHitboxes()
+        .Ignore( owner )
+        .Size( 2 )
+        .Run();
+
+      var ent = new Prop();
+      ent.Position = tr.EndPos;
+      ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) ) * Rotation.FromAxis( Vector3.Up, 180 );
+      ent.SetModel( modelname );
+
+      // Drop to floor
+      if ( ent.PhysicsBody != null && ent.PhysicsGroup.BodyCount == 1 )
+      {
+        var p = ent.PhysicsBody.FindClosestPoint( tr.EndPos );
+
+        var delta = p - tr.EndPos;
+        ent.PhysicsBody.Position -= delta;
+        //DebugOverlay.Line( p, tr.EndPos, 10, false );
+      }
+
     }
 
-    ent.Position = tr.EndPos;
-    ent.Rotation = Rotation.From(new Angles(0, owner.EyeRot.Angles().yaw, 0));
+    [ServerCmd( "spawn_entity" )]
+    public static void SpawnEntity( string entName )
+    {
+      var owner = ConsoleSystem.Caller.Pawn;
 
-    //Log.Info( $"ent: {ent}" );
+      if ( owner == null )
+        return;
+
+      var attribute = Library.GetAttribute( entName );
+
+      if ( attribute == null || !attribute.Spawnable )
+        return;
+
+      var tr = Trace.Ray( owner.EyePos, owner.EyePos + owner.EyeRot.Forward * 200 )
+        .UseHitboxes()
+        .Ignore( owner )
+        .Size( 2 )
+        .Run();
+
+      var ent = Library.Create<Entity>( entName );
+      if ( ent is BaseCarriable && owner.Inventory != null )
+      {
+        if ( owner.Inventory.Add( ent, true ) )
+          return;
+      }
+
+      ent.Position = tr.EndPos;
+      ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) );
+
+      //Log.Info( $"ent: {ent}" );
+    }
   }
 }
