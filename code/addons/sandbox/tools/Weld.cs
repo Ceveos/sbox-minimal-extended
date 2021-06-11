@@ -12,7 +12,6 @@
 
 			using ( Prediction.Off() )
 			{
-				var input = Owner.Input;
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
 
@@ -29,7 +28,7 @@
 				if ( tr.Entity is not Prop prop )
 					return;
 
-				if ( input.Pressed( InputButton.Attack1 ) )
+				if ( Input.Pressed( InputButton.Attack1 ) )
 				{
 					if ( prop.Root is not Prop rootProp )
 					{
@@ -49,13 +48,13 @@
 						target = null;
 					}
 				}
-				else if ( input.Pressed( InputButton.Attack2 ) )
+				else if ( Input.Pressed( InputButton.Attack2 ) )
 				{
 					prop.Unweld( true );
 
 					Reset();
 				}
-				else if ( input.Pressed( InputButton.Reload ) )
+				else if ( Input.Pressed( InputButton.Reload ) )
 				{
 					if ( prop.Root is not Prop rootProp )
 					{

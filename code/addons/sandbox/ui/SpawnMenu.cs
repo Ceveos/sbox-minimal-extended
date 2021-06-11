@@ -72,7 +72,7 @@ public partial class SpawnMenu : Panel
 	{
 		base.Tick();
 
-		Parent.SetClass( "spawnmenuopen", Local.Client.Input.Down( InputButton.Menu ) );
+		Parent.SetClass( "spawnmenuopen", Input.Down( InputButton.Menu ) );
 	}
 
 }
