@@ -5,7 +5,7 @@ using Sandbox;
 
 namespace SandboxGameAddon
 {
-  [Library("sandbox-game-info")]
+  [Library( "sandbox-game-info" )]
   public class AddonInfo : BaseAddonInfo
   {
     public override string Name => "Sandbox";
