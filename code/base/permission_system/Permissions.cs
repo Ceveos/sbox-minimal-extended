@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace PermissionSystem
 {
-  [Library("permission-system")]
+  [Library( "permission-system" )]
   public static partial class Permissions
   {
     private static readonly FileParserBase _parser = new JsonFileParser();
@@ -13,18 +13,44 @@ namespace PermissionSystem
 
     public static void Initialize()
     {
-      if (Host.IsServer && !IsInitialized)
+      if ( Host.IsServer && !IsInitialized )
       {
         Bundle = _parser.LoadEverything();
-        ClientHasPermissionEvent += DoClientHasPermissionEvent;
-        ClientCanTargetEvent += DoClientCanTargetEvent;
+
+        SetupEvents();
+
         IsInitialized = true;
       }
     }
-
     public static void ReloadPermissions()
     {
-      Bundle = _parser.LoadEverything();
+      if ( Host.IsServer )
+      {
+        Bundle = _parser.LoadEverything();
+        SetupEvents();
+      }
+    }
+
+    public static void SetupEvents()
+    {
+
+      if ( Bundle.Options.DisableHasPermissionHandler )
+      {
+        ClientHasPermissionEvent -= DoClientHasPermissionEvent;
+      }
+      else
+      {
+        ClientHasPermissionEvent += DoClientHasPermissionEvent;
+      }
+
+      if ( Bundle.Options.DisableCanTargetHandler )
+      {
+        ClientCanTargetEvent -= DoClientCanTargetEvent;
+      }
+      else
+      {
+        ClientCanTargetEvent += DoClientCanTargetEvent;
+      }
     }
   }
 }

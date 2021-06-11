@@ -214,7 +214,9 @@ namespace PermissionSystem
       // Get options
       Options options = new();
 
-      options.ReloadOnHotload = jsonOptions.reloadOnHotload;
+      options.ReloadOnHotload = jsonOptions.reloadOnHotload ?? true;
+      options.DisableCanTargetHandler = jsonOptions.disableDefaultCanTargetHandler ?? false;
+      options.DisableHasPermissionHandler = jsonOptions.disableDefaultHasPermissionHandler ?? false;
 
       if ( groups.ContainsKey( jsonOptions.defaultGroup ) )
       {
