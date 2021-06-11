@@ -34,20 +34,14 @@ namespace PermissionSystem
     public static void SetupEvents()
     {
 
-      if ( Bundle.Options.DisableHasPermissionHandler )
-      {
-        ClientHasPermissionEvent -= DoClientHasPermissionEvent;
-      }
-      else
+      ClientHasPermissionEvent -= DoClientHasPermissionEvent;
+      if ( !Bundle.Options.DisableHasPermissionHandler )
       {
         ClientHasPermissionEvent += DoClientHasPermissionEvent;
       }
 
-      if ( Bundle.Options.DisableCanTargetHandler )
-      {
-        ClientCanTargetEvent -= DoClientCanTargetEvent;
-      }
-      else
+      ClientCanTargetEvent -= DoClientCanTargetEvent;
+      if ( !Bundle.Options.DisableCanTargetHandler )
       {
         ClientCanTargetEvent += DoClientCanTargetEvent;
       }
