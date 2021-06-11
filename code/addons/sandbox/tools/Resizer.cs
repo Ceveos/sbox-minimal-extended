@@ -12,13 +12,12 @@ namespace Sandbox.Tools
 
 			using ( Prediction.Off() )
 			{
-				var input = Owner.Input;
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
 
 				int resizeDir;
-				if ( input.Down( InputButton.Attack1 ) ) resizeDir = 1;
-				else if ( input.Down( InputButton.Attack2 ) ) resizeDir = -1;
+				if ( Input.Down( InputButton.Attack1 ) ) resizeDir = 1;
+				else if ( Input.Down( InputButton.Attack2 ) ) resizeDir = -1;
 				else return;
 
 				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
@@ -43,8 +42,7 @@ namespace Sandbox.Tools
 					tr.Entity.PhysicsGroup.Wake();
 				}
 
-				if ( input.Pressed( InputButton.Attack1 ) ||
-					 input.Pressed( InputButton.Attack2 ) )
+				if ( Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 ) )
 				{
 					CreateHitEffects( tr.EndPos );
 				}

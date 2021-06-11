@@ -35,10 +35,8 @@
 
 			using ( Prediction.Off() )
 			{
-				var input = Owner.Input;
-
-				bool useRope = input.Pressed( InputButton.Attack1 );
-				if ( !useRope && !input.Pressed( InputButton.Attack2 ) )
+				bool useRope = Input.Pressed( InputButton.Attack1 );
+				if ( !useRope && !Input.Pressed( InputButton.Attack2 ) )
 					return;
 
 				var startPos = Owner.EyePos;

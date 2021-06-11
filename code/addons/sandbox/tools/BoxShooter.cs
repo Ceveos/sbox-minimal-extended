@@ -9,12 +9,12 @@
 		{
 			if ( Host.IsServer )
 			{
-				if ( Owner.Input.Pressed( InputButton.Attack1 ) )
+				if ( Input.Pressed( InputButton.Attack1 ) )
 				{
 					ShootBox();
 				}
 
-				if ( Owner.Input.Down( InputButton.Attack2 ) && timeSinceShoot > 0.05f )
+				if ( Input.Down( InputButton.Attack2 ) && timeSinceShoot > 0.05f )
 				{
 					timeSinceShoot = 0;
 					ShootBox();

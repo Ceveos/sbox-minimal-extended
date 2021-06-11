@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using MinimalExtended;
 using Sandbox;
 
-namespace SandboxGameAddon
+namespace CrashOnJoin
 {
-  [Library("sandbox-game-info")]
+  [Library("crash-on-join-info")]
   public class AddonInfo : BaseAddonInfo
   {
-    public override string Name => "Sandbox";
+    public override string Name => "Crasher";
 
-    public override string Description => "Default sandbox game mode";
+    public override string Description => "Crash anyone not authorized to play the server";
 
-    public override string Author => "Garry";
+    public override string Author => "Alex";
 
-    public override double Version => 1.1;
+    public override double Version => 1.0;
     public override List<AddonDependency> Dependencies => new()
     {
       new AddonDependency()
@@ -30,7 +30,7 @@ namespace SandboxGameAddon
     };
   }
 
-  public class SandboxGameAddon : AddonClass<AddonInfo>
+  public class CrashAddon : AddonClass<AddonInfo>
   {
   }
 }

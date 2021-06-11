@@ -10,9 +10,7 @@
 
 			using ( Prediction.Off() )
 			{
-				var input = Owner.Input;
-
-				if ( !input.Pressed( InputButton.Attack1 ) )
+				if ( !Input.Pressed( InputButton.Attack1 ) )
 					return;
 
 				var startPos = Owner.EyePos;
