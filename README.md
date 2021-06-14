@@ -2,7 +2,7 @@
 
 ![Screenshot](https://files.facepunch.com/garry/8fc638dc-2c62-4ed6-b20a-69c2c5342a9c.jpg)
 
- Minimal-extended gamemode for s&box.
+ Minimal-extended modular gamemode for s&box.
  
  # Installing
  
@@ -10,9 +10,18 @@
  
  # Installing Addons
 
-Under `minimal-extended/code/addons` you can simply drag-and-drop your addon modules here. If the addon requires any assets (such as models), they have to be manually placed in the correct directory (for example, `minimal-extended/models`) 
+Under `minimal-extended/code/addons` you can simply drag-and-drop your addon modules here. If the addon requires any assets (such as models), they have to be manually placed in the correct directory (for example, `minimal-extended/models`). Most addons include an `asset-copier.bat` which performs this.
 
-# Included Addons
+## List of Optional Addons
+
+Here's some example addons that are compatible:
+
+- [sandbox-plus](https://github.com/nebual/sandbox-plus) - A fork of the official [sandbox](https://github.com/facepunch/sandbox) gamemode,
+intended as a possible base for minimal-extended, with an emphasis on extendability
+- [Wirebox](https://github.com/wiremod/wirebox) - Wiremod for s&box
+- [napkins-chat](https://github.com/Nebual/napkins-chat) - A very small addon that makes the vanilla chat have history
+
+# Builtin Addons
 
 There are a few modules included by default in Minimal-Extended. These modules are considered essential for most servers, and the inclusion of it 
 
@@ -132,3 +141,15 @@ Yes, this template will check all the dependencies of your addons and ensure tha
 2. Have the required minimum version
 
 While most issues with dependencies will be caught at compile time due to the nature of using said dependencies, this is a fallback to catch errors early on in runtime. 
+
+## What files need to be copied to the root gamemode?
+
+Generally, anything that isn't `.cs`:
+- models
+- materials
+- particles
+- sounds
+- `code/ui/*.scss`
+- `code/ui/*.html`
+
+[sandbox-plus](https://github.com/nebual/sandbox-plus) has an example [`asset-copier.bat`](https://github.com/nebual/sandbox-plus/blob/main/asset-copier.bat)
