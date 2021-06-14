@@ -39,7 +39,7 @@ partial class Pistol : Weapon
 
 		TimeSinceDischarge = 0;
 
-		var muzzle = GetAttachment( "muzzle" );
+		var muzzle = GetAttachment( "muzzle" ) ?? default;
 		var pos = muzzle.Position;
 		var rot = muzzle.Rotation;
 
