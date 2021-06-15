@@ -24,6 +24,18 @@ namespace SandboxGameAddon
       base.Dispose();
     }
 
+    [Event( "hotloaded" )]
+    public static void OnHotLoad()
+    {
+      if ( IsServer )
+      {
+        Save.SaveModule db = new Save.JsonSaveModule( "Default", true);
+        int count = db.Load<int>( "hotload_count" );
+        Log.Warning( $"[Server] Hotloaded {++count} times" );
+        db.Save( "hotload_count", count );
+      }
+    }
+
     [Event( "client.join" )]
     public void ClientJoined( Client cl )
     {

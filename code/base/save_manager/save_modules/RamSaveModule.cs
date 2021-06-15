@@ -39,6 +39,10 @@ namespace Save
       return Instances[database];
     }
 
+    public override bool Clear( string client = "Global" )
+    {
+      return DataStore.Remove( client );
+    }
     public override bool Clear()
     {
       // Not necessary, but may be quicker than

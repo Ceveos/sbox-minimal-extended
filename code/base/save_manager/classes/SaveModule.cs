@@ -8,6 +8,7 @@ namespace Save
     public abstract T Load<T>(string key, string client = "Global") where T : struct;
     public abstract bool Exist(string key, string client = "Global");
     public abstract bool RemoveItem(string key, string client = "Global");
+    public abstract bool Clear( string client = "Global" );
     public abstract bool Clear();
   }
 }
