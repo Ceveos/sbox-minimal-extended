@@ -1,16 +1,21 @@
 # sbox-minimal-extended
 
-![Screenshot](https://files.facepunch.com/garry/8fc638dc-2c62-4ed6-b20a-69c2c5342a9c.jpg)
+Modular gamemode with addon support for s&box.
+ 
+# Installing
 
- Minimal-extended modular gamemode for s&box.
- 
- # Installing
- 
- Download as a zip and put the `minimum-extended` folder in your `addons/` folder. It should show up in the menu allowing you to make a new game.
- 
- # Installing Addons
+1. Clone/Download this repo to `common/sbox/workspace`
+2. Run `.\watcher.ps1 your-new-gamemode -build` to get started, which will create an `sbox/workspace/your-new-gamemode/` folder you can drop addons into
+3. Run `.\watcher.ps1 your-new-gamemode -build` again to **erase** and copy fresh files from `sbox/workspace/your-new-gamemode/` into `sbox/addons/your-new-gamemode/`,
+which will then watch for file changes in your workspace, auto copying them to `sbox/addons` where the game will hot reload from.  
+Note: `-build`'s copy will likely overwhelm the hotreloader, freezing the game.
+4. Launch s&box and your new gamemode will show in the menu, allowing you to start a new game.
+5. `.\watcher.ps1 your-new-gamemode` will skip the erase/refresh step, and simply watch for new changes
 
-Under `minimal-extended/code/addons` you can simply drag-and-drop your addon modules here. If the addon requires any assets (such as models), they have to be manually placed in the correct directory (for example, `minimal-extended/models`). Most addons include an `asset-copier.bat` which performs this.
+ 
+# Installing Addons
+
+Under `sbox/workspace/your-new-gamemode/` you can simply drag-and-drop your addon modules here. Any assets (eg. models) will be copied from each addon to the resulting gamemode's root `models/`, where the game expects. It is recommended (to avoid collisions) to namespace addon assets, eg. `sbox/workspace/my-gamemode/wirebox/models/wirebox/gate.vmdl`, which will be accessible in-game as `models/wirebox/gate.vmdl`.
 
 ## List of Optional Addons
 
@@ -23,7 +28,7 @@ intended as a possible base for minimal-extended, with an emphasis on extendabil
 
 # Builtin Addons
 
-There are a few modules included by default in Minimal-Extended. These modules are considered essential for most servers, and the inclusion of it 
+There are a few modules included by default in Minimal-Extended. These modules are considered essential for most servers.
 
 ## 1. Permission System
 
@@ -129,9 +134,24 @@ private static readonly Logger Log = new( AddonInfo.Instance );
 
 # FAQ
 
-## Do addons have to be placed under /code/addons?
+## Why do I need this Watcher script?
 
-Addons can be placed anywhere under the `/code/` directory (even nested). However, for consistency, it is recommended to place addons under the `/code/addons/` directory.
+Addons are usually individual git repositories, each with their own models/code, but this causes a few problems for s&box:
+- assets like models need to be in the root `sbox/addons/your-gamemode/models` directory to be correctly loaded by connecting players
+- on connect, players seem to download almost everything in the gamemode, including `.git` folders, `.blend`'s, etc
+
+The Watcher automates merging these addons' assets together, skipping unused files.
+
+## I'm confused, what file structure am I supposed to have?
+
+- sbox/workspace/watcher.ps1
+- sbox/workspace/prop-hunt/better-chat/.git (etc)
+- sbox/workspace/prop-hunt/better-chat/code/better-chat/AddonInfo.cs
+- sbox/workspace/prop-hunt/better-chat/code/better-chat/ChatWindow.cs
+- sbox/workspace/prop-hunt/better-chat/code/prop-hunt-core/AddonInfo.cs
+- sbox/workspace/prop-hunt/prop-hunt-core/code/prop-hunt-core/Hunter.cs
+- sbox/workspace/prop-hunt/prop-hunt-core/models/prop-hunt-core/box.vmdl
+- sbox/workspace/prop-hunt/prop-hunt-core/material/prop-hunt-core/wood.vmdl
 
 ## Does this have dependency checking?
 
@@ -141,15 +161,3 @@ Yes, this template will check all the dependencies of your addons and ensure tha
 2. Have the required minimum version
 
 While most issues with dependencies will be caught at compile time due to the nature of using said dependencies, this is a fallback to catch errors early on in runtime. 
-
-## What files need to be copied to the root gamemode?
-
-Generally, anything that isn't `.cs`:
-- models
-- materials
-- particles
-- sounds
-- `code/ui/*.scss`
-- `code/ui/*.html`
-
-[sandbox-plus](https://github.com/nebual/sandbox-plus) has an example [`asset-copier.bat`](https://github.com/nebual/sandbox-plus/blob/main/asset-copier.bat)
