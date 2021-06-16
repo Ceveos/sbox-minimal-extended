@@ -75,9 +75,6 @@ $action = {
  
     $path = $event.SourceEventArgs.FullPath
     $changeType = $event.SourceEventArgs.ChangeType
-    if ((get-item $path) -is [System.IO.DirectoryInfo]) {
-        return
-    }
     #$logline = "$(Get-Date), $changeType, $path"
     #Write-Host "Changed " $logline
     
