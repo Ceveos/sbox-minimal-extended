@@ -1,8 +1,10 @@
-# .\watcher.ps1 your-new-gamemode -build    (re-)Initializes a new gamemode, erasing and copying the contents of ./your-new-gamemode/* to sbox/addons/your-new-gamemode/*, then watches
-# .\watcher.ps1 your-new-gamemode           Watches for changes to ./your-new-gamemode/*, copying them to sbox/addons/your-new-gamemode/*
+# .\watcher.ps1 -create                     Prompts to download recommended modules
+# .\watcher.ps1 your-new-gamemode -build    (re-)Initializes a new gamemode, erasing and copying the contents of ./modules/* to sbox/addons/your-new-gamemode/*, then watches
+# .\watcher.ps1 your-new-gamemode           Watches for changes to ./modules/*, copying them to sbox/addons/your-new-gamemode/*
 
 param (
-    [Parameter(Mandatory = $true)][string]$gamemode,
+    [string]$gamemode,
+    [switch]$create = $false,
     [switch]$build = $false
 )
 
@@ -18,21 +20,22 @@ function PromptBool {
     }
 }
 
-if (-Not (Test-Path -Path "$($gamemode)")) {
-    Write-Host "Creating new sbox\modules\$($gamemode)\ directory..."
-    New-Item -ErrorAction Ignore -Type dir "$($gamemode)\"
+if (-Not (Test-Path -Path "modules") -Or $create) {
+    Write-Host "Creating new sbox\workspace\modules\ directory..."
+    New-Item -ErrorAction Ignore -Type dir "modules\"
     
     if (PromptBool -Prompt "Would you like to add sandbox-plus? (Y/N)") {
-        git clone https://github.com/Nebual/sandbox-plus.git "$($gamemode)\sandbox-plus"
+        git clone https://github.com/Nebual/sandbox-plus.git "modules\sandbox-plus"
     }
     
-    Write-Host "Add desired modules to sbox\modules\$($gamemode)\, and rerun"
-    Invoke-Item "$($gamemode)\"
+    Write-Host "Add desired modules to sbox\workspace\modules\, and rerun"
+    Invoke-Item "modules\"
+    Start-Sleep -s 4
     return
 }
 
 $basePath = "..\addons\$($gamemode)"
-$modules = dir "$($gamemode)" | ? { $_.PSISContainer }
+$modules = dir "modules" | ? { $_.PSISContainer }
 $assetFolders = @("code", "entity", "materials", "models", "particles", "sounds")
 
 if ($build) {
@@ -57,14 +60,14 @@ if ($build) {
     foreach ($module in $modules) {
         Write-Host "Copying $($module)..."
         foreach ($assetFolder in $assetFolders) {
-            Copy-Item -ErrorAction Ignore -Recurse "$($gamemode)\$($module)\$($assetFolder)" "$($basePath)\"
+            Copy-Item -ErrorAction Ignore -Recurse "modules\$($module)\$($assetFolder)" "$($basePath)\"
         }
     }
 }
 
 
 $watcher = New-Object System.IO.FileSystemWatcher
-$watcher.Path = $gamemode
+$watcher.Path = "modules"
 $watcher.Filter = '*'
 $watcher.IncludeSubdirectories = $true
 
@@ -78,12 +81,12 @@ $action = {
     #$logline = "$(Get-Date), $changeType, $path"
     #Write-Host "Changed " $logline
     
-    $path -match '^(?<gamemodeModule>[^\\]+\\[^\\]+)\\(?<localPath>.*)$'
-    $gamemodeModule = $Matches.gamemodeModule
+    $path -match '^(?<moduleAddonPath>modules\\[^\\]+)\\(?<localPath>.*)$'
+    $moduleAddonPath = $Matches.moduleAddonPath
     $localPath = $Matches.localPath
    
     foreach ($subPath in $assetFolders) {
-        if ($path.StartsWith("$($gamemodeModule)\$($subPath)")) {
+        if ($path.StartsWith("$($moduleAddonPath)\$($subPath)")) {
             $oldPath = $path
             $newPath = "$($basePath)\$($localPath)"
             if ($changeType -eq "Renamed") {

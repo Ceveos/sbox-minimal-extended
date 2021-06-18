@@ -5,17 +5,17 @@ Modular gamemode with addon support for s&box.
 # Installing
 
 1. Clone/Download this repo to `common/sbox/workspace`
-2. Run `.\watcher.ps1 your-new-gamemode -build` to get started, which will create an `sbox/workspace/your-new-gamemode/` folder you can drop addons into
-3. Run `.\watcher.ps1 your-new-gamemode -build` again to **erase** and copy fresh files from `sbox/workspace/your-new-gamemode/` into `sbox/addons/your-new-gamemode/`,
-which will then watch for file changes in your workspace, auto copying them to `sbox/addons` where the game will hot reload from.  
-Note: `-build`'s copy will likely overwhelm the hotreloader, freezing the game.
+2. Run `.\watcher.ps1 --create` to get started, which will create an `sbox/workspace/modules/` folder you can drop addons into
+3. Run `.\watcher.ps1 your-new-gamemode -build` to **erase** and copy fresh files from `sbox/workspace/modules/` into `sbox/addons/your-new-gamemode/`.
+It will then watch for file changes in your workspace, auto copying them to `sbox/addons` where the game will hot reload from.  
+Note: `-build`'s copy will likely overwhelm the hotreloader, freezing the game, so do it before launching.
 4. Launch s&box and your new gamemode will show in the menu, allowing you to start a new game.
 5. `.\watcher.ps1 your-new-gamemode` will skip the erase/refresh step, and simply watch for new changes
 
  
 # Installing Addons
 
-Under `sbox/workspace/your-new-gamemode/` you can simply drag-and-drop your addon modules here. Any assets (eg. models) will be copied from each addon to the resulting gamemode's root `models/`, where the game expects. It is recommended (to avoid collisions) to namespace addon assets, eg. `sbox/workspace/my-gamemode/wirebox/models/wirebox/gate.vmdl`, which will be accessible in-game as `models/wirebox/gate.vmdl`.
+Simply drag-and-drop addon modules into `sbox/workspace/modules/` while the watcher's running. Any assets (eg. models) will be copied from each addon to the resulting gamemode's root `models/`, where the game expects. It is recommended (to avoid collisions) to namespace addon assets, eg. `sbox/workspace/modules/wirebox/models/wirebox/gate.vmdl`, which will result in the game seeing its path as `models/wirebox/gate.vmdl`.
 
 ## List of Optional Addons
 
@@ -25,6 +25,7 @@ Here's some example addons that are compatible:
 intended as a possible base for minimal-extended, with an emphasis on extendability
 - [Wirebox](https://github.com/wiremod/wirebox) - Wiremod for s&box
 - [napkins-chat](https://github.com/Nebual/napkins-chat) - A very small addon that makes the vanilla chat have history
+- [undo-manager](https://github.com/Nebual/undo-manager) - Adds an `undo` and `redo` command, like Gmod's
 
 # Builtin Addons
 
@@ -145,13 +146,13 @@ The Watcher automates merging these addons' assets together, skipping unused fil
 ## I'm confused, what file structure am I supposed to have?
 
 - sbox/workspace/watcher.ps1
-- sbox/workspace/prop-hunt/better-chat/.git (etc)
-- sbox/workspace/prop-hunt/better-chat/code/better-chat/AddonInfo.cs
-- sbox/workspace/prop-hunt/better-chat/code/better-chat/ChatWindow.cs
-- sbox/workspace/prop-hunt/better-chat/code/prop-hunt-core/AddonInfo.cs
-- sbox/workspace/prop-hunt/prop-hunt-core/code/prop-hunt-core/Hunter.cs
-- sbox/workspace/prop-hunt/prop-hunt-core/models/prop-hunt-core/box.vmdl
-- sbox/workspace/prop-hunt/prop-hunt-core/material/prop-hunt-core/wood.vmdl
+- sbox/workspace/modules/better-chat/.git (etc)
+- sbox/workspace/modules/better-chat/code/better-chat/AddonInfo.cs
+- sbox/workspace/modules/better-chat/code/better-chat/ChatWindow.cs
+- sbox/workspace/modules/better-chat/code/prop-hunt-core/AddonInfo.cs
+- sbox/workspace/modules/prop-hunt-core/code/prop-hunt-core/Hunter.cs
+- sbox/workspace/modules/prop-hunt-core/models/prop-hunt-core/box.vmdl
+- sbox/workspace/modules/prop-hunt-core/material/prop-hunt-core/wood.vmdl
 
 ## Does this have dependency checking?
 
