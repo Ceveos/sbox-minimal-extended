@@ -87,12 +87,14 @@ $action = {
    
     foreach ($subPath in $assetFolders) {
         if ($path.StartsWith("$($moduleAddonPath)\$($subPath)")) {
-            $oldPath = $path
+            $modulePath = $path
             $newPath = "$($basePath)\$($localPath)"
             if ($changeType -eq "Renamed") {
                 $oldFullPath = $event.SourceEventArgs.OldFullPath
-                Write-Host "Deleting old $($oldFullPath)"
-                Remove-Item $oldFullPath
+                $oldFullPath -match '^(?<moduleAddonPath>modules\\[^\\]+)\\(?<localPath>.*)$'
+                $oldAddonPath = "$($basePath)\$($Matches.localPath)"
+                Write-Host "Deleting old $($oldAddonPath)"
+                Remove-Item $oldAddonPath
                 # Fallthrough to copy behaviour
             }
             if ($changeType -eq "Deleted") {
@@ -100,9 +102,9 @@ $action = {
                 Remove-Item -Recurse $newPath
             }
             else {
-                Write-Host "Copying $($oldPath) to $($newPath)"
+                Write-Host "Copying $($modulePath) to $($newPath)"
                 New-Item -Type dir (split-path $newPath -Parent)
-                Copy-Item $oldPath $newPath
+                Copy-Item $modulePath $newPath
             }
         }
     }
